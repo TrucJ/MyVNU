@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MyVNU</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps2">MapsActivity2</string>
+    <string name="map_key" translatable="false">AIzaSyDhTpTcFbpw3Y1Jt4W6890Yob39BbGz5Xo</string>
+</resources>
