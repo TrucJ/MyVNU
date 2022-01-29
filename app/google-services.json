@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1038044081564",
+    "project_id": "myvnu-19tn",
+    "storage_bucket": "myvnu-19tn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038044081564:android:9da4e8751b24f032ab6c59",
+        "android_client_info": {
+          "package_name": "com.example.myvnu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038044081564-u3m5rb2vkrr964q3h5ertf6r8a19mj4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi4GqbRhu17a8-Jq5wHLUb6PW572MLZZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038044081564-u3m5rb2vkrr964q3h5ertf6r8a19mj4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

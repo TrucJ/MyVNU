@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @Entity(tableName = "base", primaryKeys = {"lat", "lng"})
 public class Place implements Serializable {
@@ -40,6 +41,16 @@ public class Place implements Serializable {
 
     @ColumnInfo(name = "max_zoom")
     private int maxZoom;
+    /*
+    @ColumnInfo(name = "tags")
+    private ArrayList<String> tags;
+
+    @ColumnInfo(name = "intro")
+    private String intro;*/
+
+    public Place(){
+
+    }
 
     public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom) {
         this.lat = lat;
@@ -52,6 +63,9 @@ public class Place implements Serializable {
         this.phoneNumber = phoneNumber;
         this.minZoom = minZoom;
         this.maxZoom = maxZoom;
+        //this.tags = null;
+        //this.intro = null;
+
     }
 
     public double getLat() {
