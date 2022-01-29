@@ -9,30 +9,33 @@
 
     <ImageView
         android:id="@+id/imageCustomPlace"
-        android:layout_width="339dp"
-        android:layout_height="249dp"
+        android:layout_width="400dp"
+        android:layout_height="600dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/signup_banner" />
-
-    <TextView
-        android:id="@+id/TTCT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Thông tin chi tiết"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageCustomPlace" />
-
     <LinearLayout
+        android:id="@+id/upLayout2"
         android:layout_width="419dp"
-        android:layout_height="440dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bottom_background_light_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <ImageView
+        android:id="@+id/imageView54"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:onClick="setUpLayout2"
+        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/downLayout2"
+        android:layout_width="419dp"
+        android:layout_height="500dp"
         android:background="@drawable/bottom_background_light_green"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
@@ -40,9 +43,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TTCT"
-        app:layout_constraintVertical_bias="0.0">
-
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="invisible">
+        <ImageView
+            android:id="@+id/imageView85"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:onClick="setDownLayout2"
+            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
         <LinearLayout
             android:layout_width="360dp"
             android:layout_height="wrap_content"

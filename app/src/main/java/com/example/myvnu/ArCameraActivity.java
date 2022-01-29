@@ -31,7 +31,7 @@ public class ArCameraActivity extends AppCompatActivity {
 
         CustomArFragment customArFragment = (CustomArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
         ModelRenderable.builder()
-                .setSource(this, R.raw.sunglasses)
+                .setSource(this, R.raw.fox_face)
                 .build()
                 .thenAccept(rendarable -> {
                     this.modelRenderable = rendarable;

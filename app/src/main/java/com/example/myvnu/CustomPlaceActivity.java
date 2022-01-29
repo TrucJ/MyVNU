@@ -32,6 +32,8 @@ public class CustomPlaceActivity extends AppCompatActivity {
     EditText date;
     LinearLayout layout3;
     LinearLayout layout2;
+    LinearLayout upLayout;
+    LinearLayout downLayout;
     Bundle data;
     CustomPlace item;
     @Override
@@ -78,6 +80,7 @@ public class CustomPlaceActivity extends AppCompatActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                downLayout.setVisibility(View.VISIBLE);
                 layout3.setVisibility(View.INVISIBLE);
                 layout2.setVisibility(View.VISIBLE);
                 setEditable(title,true);
@@ -148,7 +151,14 @@ public class CustomPlaceActivity extends AppCompatActivity {
         }
 
     }
-
+    public void setUpLayout2(View view){
+        upLayout.setVisibility(View.INVISIBLE);
+        downLayout.setVisibility(View.VISIBLE);
+    }
+    public void setDownLayout2(View view){
+        downLayout.setVisibility(View.INVISIBLE);
+        upLayout.setVisibility(View.VISIBLE);
+    }
     private void initView() {
         imageView = (ImageView) findViewById(R.id.imageCustomPlace);
         btnEdit = (Button)findViewById(R.id.btnEditCP);
@@ -163,6 +173,8 @@ public class CustomPlaceActivity extends AppCompatActivity {
         date = (EditText) findViewById(R.id.dateCustomPlace);
         layout3 = (LinearLayout) findViewById(R.id.layout3Btn);
         layout2 = (LinearLayout) findViewById(R.id.layout2Btn);
+        upLayout = (LinearLayout)findViewById(R.id.upLayout2);
+        downLayout = (LinearLayout) findViewById(R.id.downLayout2);
     }
 
     public Bitmap loadImage(String imgName){
