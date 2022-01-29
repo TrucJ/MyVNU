@@ -9,59 +9,72 @@
 
     <ImageView
         android:id="@+id/imagePlace"
-        android:layout_width="339dp"
-        android:layout_height="249dp"
+        android:layout_width="400dp"
+        android:layout_height="600dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/signup_banner" />
 
-    <TextView
-        android:id="@+id/TTCT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Thông tin chi tiết"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePlace" />
-
     <LinearLayout
+        android:id="@+id/upLayout"
         android:layout_width="419dp"
-        android:layout_height="440dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="30dp"
         android:background="@drawable/bottom_background_light_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:onClick="setUpLayout"
+            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/downLayout"
+        android:layout_width="419dp"
+        android:layout_height="460dp"
+        android:background="@drawable/bottom_background_light_green"
+        android:fitsSystemWindows="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TTCT"
-        android:fitsSystemWindows="true">
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:onClick="setDownLayout"
+            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
         <LinearLayout
             android:layout_width="360dp"
-            android:layout_height="wrap_content"
+            android:layout_height="325dp"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="350dp">
+                android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="0dp"
-                        android:paddingLeft="25dp"
-                        android:baselineAligned="false">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:paddingLeft="25dp">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -86,9 +99,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
+                        android:baselineAligned="false"
                         android:orientation="horizontal"
-                        android:paddingLeft="25dp"
-                        android:baselineAligned="false">
+                        android:paddingLeft="25dp">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -136,6 +149,7 @@
                             android:text="17/09/2001"
                             android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -158,11 +172,12 @@
                             android:cursorVisible="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
+                            android:inputType="number"
                             android:paddingLeft="20dp"
                             android:text="0945334981"
-                            android:inputType="number"
                             android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -198,19 +213,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            android:paddingLeft="25dp"
-            >
+            android:paddingLeft="25dp">
 
             <Button
                 android:id="@+id/btnViewPlace"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="120dp"
                 android:background="@drawable/button_style"
                 android:minWidth="140dp"
                 android:text="XEM VÍ TRÍ"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="10sp" />
         </LinearLayout>
 
     </LinearLayout>

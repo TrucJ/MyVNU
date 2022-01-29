@@ -608,5 +608,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         selectedMarker = addFlagMarkerOnMap(latLng,"Selected");
         if(btnTT.getVisibility() == View.VISIBLE) btnTT.setVisibility(View.INVISIBLE);
     }
-
+    public void convert2Voice(View view){
+        Toast toast = Toast.makeText(MapsActivity.this, "Khám phá", Toast.LENGTH_SHORT);
+        toast.show();
+        Intent intent = new Intent(MapsActivity.this, RecommendActivity.class);
+        startActivity(intent);
+    }
 }

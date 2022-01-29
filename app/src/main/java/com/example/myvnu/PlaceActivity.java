@@ -28,6 +28,8 @@ public class PlaceActivity extends AppCompatActivity {
     EditText link;
     Button btnView;
     ImageView img;
+    LinearLayout upLayout;
+    LinearLayout downLayout;
     Bundle data;
     Place item;
     @Override
@@ -43,7 +45,14 @@ public class PlaceActivity extends AppCompatActivity {
         super.onResume();
         initIntent();
     }
-
+    public void setUpLayout(View view){
+        upLayout.setVisibility(View.INVISIBLE);
+        downLayout.setVisibility(View.VISIBLE);
+    }
+    public void setDownLayout(View view){
+        downLayout.setVisibility(View.INVISIBLE);
+        upLayout.setVisibility(View.VISIBLE);
+    }
     private void initView() {
         imageView = (ImageView) findViewById(R.id.imagePlace) ;
         btnView = (Button)findViewById(R.id.btnViewPlace);
@@ -53,6 +62,8 @@ public class PlaceActivity extends AppCompatActivity {
         phone = (EditText) findViewById(R.id.phonePlace);
         link = (EditText) findViewById(R.id.linkPlace);
         img = (ImageView)findViewById(R.id.imagePlace);
+        upLayout = (LinearLayout)findViewById(R.id.upLayout);
+        downLayout = (LinearLayout) findViewById(R.id.downLayout);
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
