@@ -17,6 +17,9 @@ public interface PlaceDao {
     @Query("SELECT * FROM base")
     List<Place> getAllDefaultPlaces();
 
+    @Query("SELECT img_path FROM base")
+    List<String> getAllImages();
+
     @Query("SELECT lat, lng, title, img_path FROM base")
     List<MapInfo> getAllDefaultMapInfo();
 

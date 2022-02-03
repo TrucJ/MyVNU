@@ -6,53 +6,52 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 @Entity(tableName = "base", primaryKeys = {"lat", "lng"})
 public class Place implements Serializable {
     @NonNull
     @ColumnInfo(name = "lat")
-    private double lat;
+    public double lat;
 
     @NonNull
     @ColumnInfo(name = "lng")
-    private double lng;
+    public double lng;
 
     @ColumnInfo(name = "title")
-    private String title;
+    public String title;
 
     @ColumnInfo(name = "img_path")
-    private String imgPath;
+    public String imgPath;
 
     @ColumnInfo(name = "description")
-    private String description;
+    public String description;
 
     @ColumnInfo(name = "address")
-    private String address;
+    public String address;
 
     @ColumnInfo(name = "link")
-    private String link;
+    public String link;
 
     @ColumnInfo(name = "phone_number")
-    private String phoneNumber;
+    public String phoneNumber;
 
     @ColumnInfo(name = "min_zoom")
-    private int minZoom;
+    public int minZoom;
 
     @ColumnInfo(name = "max_zoom")
-    private int maxZoom;
-    /*
+    public int maxZoom;
+
     @ColumnInfo(name = "tags")
-    private ArrayList<String> tags;
+    public String tags;
 
     @ColumnInfo(name = "intro")
-    private String intro;*/
+    public String intro;
 
     public Place(){
 
     }
 
-    public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom) {
+    public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom, String tags, String intro) {
         this.lat = lat;
         this.lng = lng;
         this.title = title;
@@ -63,9 +62,8 @@ public class Place implements Serializable {
         this.phoneNumber = phoneNumber;
         this.minZoom = minZoom;
         this.maxZoom = maxZoom;
-        //this.tags = null;
-        //this.intro = null;
-
+        this.tags = tags;
+        this.intro = intro;
     }
 
     public double getLat() {
@@ -146,5 +144,21 @@ public class Place implements Serializable {
 
     public void setMaxZoom(int maxZoom) {
         this.maxZoom = maxZoom;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 }

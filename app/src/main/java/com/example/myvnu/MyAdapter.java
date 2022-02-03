@@ -80,7 +80,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     public Bitmap loadImage(String imgName){
-        String fullPath = MainActivity.imgPath + imgName;
+        String fullPath = MainActivity.IMG_PATH + imgName;
         Bitmap b = BitmapFactory.decodeFile(fullPath);
         return b;
     }
