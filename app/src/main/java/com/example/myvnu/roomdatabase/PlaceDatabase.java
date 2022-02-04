@@ -25,12 +25,12 @@ public abstract class PlaceDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PlaceDatabase.class, Const.DEFAULT_DB_NAME)
                             .createFromAsset(Const.ASSETS_INIT_DATABASE)
                             .allowMainThreadQueries()
+                    //        .fallbackToDestructiveMigration()
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
-
 
 }

@@ -47,6 +47,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     StorageReference storageRef;
     double currentVersion, latestVersion;
     String CACHE_DIR;
+    List<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +81,41 @@ public class MainActivity extends AppCompatActivity {
 
         initAll();
 
+        mData = FirebaseDatabase.getInstance().getReference();
+        mData.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                latestVersion = (Double) snapshot.getValue();
+                System.out.println("Latest version = " + latestVersion);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference("assets.zip");
         System.out.println(storageRef.toString());
+
+        /* Upload db for only the first time
+        places = PlaceDatabase.getDatabase(this).placeDao().getAllDefaultPlaces();
+        System.out.println(places.size());
+        Iterator<Place> iter = places.iterator();
+
+        while (iter.hasNext()){
+            Place place = iter.next();
+            String ll = Double.toString(place.getLat()) + '+' + Double.toString(place.getLng());
+            String key = ll.replace('.', 'p');
+            mData.child("data").child(key).setValue(place);
+        }
+         */
+
+        Place np = new Place(50.002, 50.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
+        mData.child("data").child("50p002+50p003").setValue(np);
+
+        Place np2 = new Place(30.002, 30.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
+        mData.child("data").child("30p002+30p003").setValue(np2);
 
         /*
         final File localFile = new File(rootPath,"update.zip");
@@ -102,23 +137,8 @@ public class MainActivity extends AppCompatActivity {
         });
          */
         // init Firebase DB ref and get the latest version
-        mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                latestVersion = (Double) snapshot.getValue();
-                System.out.println("Latest version = " + latestVersion);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         initDB();
-        //upload();
-
-        //List<Place> places = PlaceDatabase.getDatabase(MainActivity.this).placeDao().getAllPlaces();
         makeRecycleView();
         setGoToMap();
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDB() {
-        DBAction dbAction = new DBAction();
+        //DBAction dbAction = new DBAction();
+        PlaceDatabase.getDatabase(this).placeDao().findPlaceWithTitle("alo");
         if(checkEmptyDB()){
             System.out.println("DB is empty");
             populateDB();
@@ -288,50 +309,70 @@ public class MainActivity extends AppCompatActivity {
         else{
             Toast.makeText(this, "Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi.", Toast.LENGTH_SHORT).show();
             DBAction dbAction = new DBAction();
-            writeVersionToTextFile(latestVersion);
+
             currentVersion = latestVersion;
-            if(true) return;
 
             // Tạo cơ sở dữ liệu mới nhất
             mData.child("data").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    ArrayList<Place> places = (ArrayList<Place>) task.getResult().getValue();
-                    for(int i = 0; i < places.size(); i++){
-                        Place place = places.get(i);
+                   HashMap<String, Object> dat = (HashMap<String, Object>) task.getResult().getValue();
+                   dat.forEach((key, value) -> {
+                       //System.out.println(key);
+                       HashMap<String, Object> h = (HashMap<String, Object>) value;
+                       Place p = new Place(h);
+                       dbAction.insert(MainActivity.this, p);
+                       //System.out.println("insert ok: " + Double.toString(p.getLng()));
 
-                        dbAction.insert(MainActivity.this, place);
+                   });
+                    // Lấy danh sách file ảnh mới nhất
+                    ArrayList<String> latestImages = new ArrayList<String>();
+                    latestImages.addAll(dbAction.getAllImages(MainActivity.this));
+                    //for(int i = 0; i < latestImages.size(); i++)
+                    //    System.out.println(latestImages.get(i));
+
+
+                    // Lấy danh sách file ảnh local hiện tại
+                    ArrayList<String> currentImages = new ArrayList<String>();
+                    String imgPath = getApplicationContext().getCacheDir().getAbsolutePath() + "/places";
+                    File directory = new File(imgPath);
+                    File[] files = directory.listFiles();
+                    for(int i = 0; i < files.length; i++){
+                        currentImages.add(files[i].getName());
                     }
+
+                    System.out.println(Integer.toString(currentImages.size()));
+                    for(int i = 0; i < currentImages.size(); i++)
+                        System.out.println(currentImages.get(i));
+
+
+
+                    // Lấy danh sách file ảnh cần tải bổ sung
+                    ArrayList<String> newImages = new ArrayList<String>();
+                    for(int i = 0; i < latestImages.size(); i++){
+                        if(!currentImages.contains(latestImages.get(i)))
+                            newImages.add(latestImages.get(i));
+                    }
+
+                    System.out.println(Integer.toString(newImages.size()));
+                    for(int i = 0; i < newImages.size(); i++)
+                        System.out.println(newImages.get(i));
+
+
+
+                    // Tải xuống các file ảnh bổ sung
+                    for(int i = 0; i < newImages.size(); i++){
+                        downloadImage(newImages.get(i));
+                    }
+
+                    // Cập nhật xong
+                    writeVersionToTextFile(latestVersion);
+                    Toast.makeText(MainActivity.this, "Đã cập nhật xong!.", Toast.LENGTH_SHORT).show();
+
                 }
             });
 
-            // Lấy danh sách file ảnh mới nhất
-            ArrayList<String> latestImages = new ArrayList<String>();
-            latestImages.addAll(dbAction.getAllImages(MainActivity.this));
 
-            // Lấy danh sách file ảnh local hiện tại
-            ArrayList<String> currentImages = new ArrayList<String>();
-            String imgPath = getApplicationContext().getCacheDir().getAbsolutePath() + "/places";
-            File directory = new File(imgPath);
-            File[] files = directory.listFiles();
-            for(int i = 0; i < files.length; i++){
-                currentImages.add(files[i].getName());
-            }
-
-            // Lấy danh sách file ảnh cần tải bổ sung
-            ArrayList<String> newImages = new ArrayList<String>();
-            for(int i = 0; i < latestImages.size(); i++){
-                if(!currentImages.contains(latestImages.get(i)))
-                    newImages.add(latestImages.get(i));
-            }
-
-            // Tải xuống các file ảnh bổ sung
-            for(int i = 0; i < newImages.size(); i++){
-                downloadImage(newImages.get(i));
-            }
-
-            // Cập nhật xong
-            Toast.makeText(this, "Đã cập nhật xong!.", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -352,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReference("images/" + filename);
         StorageReference islandRef = storageRef;
 
-        File rootPath = new File(Environment.getExternalStorageDirectory(), "places");
+        File rootPath = new File(CACHE_DIR, "places");
         if(!rootPath.exists()) {
             rootPath.mkdirs();
         }
@@ -362,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " +localFile.toString());
+                Log.e("firebase ",";local tem file created  created " + localFile.toString());
                 //  updateDb(timestamp,localFile.toString(),position);
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -3,32 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/LA/MyVNU/app/src/main/res/layout/activity_add_new_place.xml" value="0.32916666666666666" />
-        <entry key="..\:/LA/MyVNU/app/src/main/res/layout/activity_custom_place.xml" value="0.2755208333333333" />
-        <entry key="..\:/LA/MyVNU/app/src/main/res/layout/activity_maps.xml" value="0.33" />
-        <entry key="..\:/LA/MyVNU/app/src/main/res/layout/activity_place.xml" value="0.2755208333333333" />
-        <entry key="..\:/LA/MyVNU/app/src/main/res/layout/custom_places.xml" value="0.32916666666666666" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/bottom_background_light_green.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/button_background_green1.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/button_background_green2.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/button_background_green3.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.20572916666666666" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.20572916666666666" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.20572916666666666" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.2703125" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/drawable/ic_baseline_keyboard_voice_24.xml" value="0.20572916666666666" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_ar_camera.xml" value="0.25416666666666665" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_custom_place.xml" value="0.264" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_main.xml" value="0.18958333333333333" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_maps.xml" value="0.1" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_place.xml" value="0.264" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_recommend.xml" value="0.264" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_recommendation.xml" value="0.18958333333333333" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/activity_test_load_db.xml" value="0.176" />
-        <entry key="..\:/Subject/Nam 3/Android/MyVNU/app/src/main/res/layout/custom_places.xml" value="0.18958333333333333" />
-        <entry key="..\:/android/MyVNU/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />
-        <entry key="..\:/android/MyVNU/app/src/main/res/layout/activity_recommend.xml" value="0.2259963768115942" />
+        <entry key="..\:/android/new2/MyVNU/app/src/main/res/layout/activity_main.xml" value="0.14895833333333333" />
       </map>
     </option>
   </component>

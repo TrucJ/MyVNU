@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.admin.SystemUpdatePolicy;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -353,10 +354,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //addMarkerOnMap(10.8880703,106.7891710, "Kí túc xá khu B - Đại học Quốc gia TPHCM", "ktxb", false);
         //addMarkerOnMap(10.8797654,106.7951268, "Nhà khách Đại học Quốc gia TPHCM","nhakhach", false);
         places = dbAction.getAllDefaultPlaces(MapsActivity.this);
+        System.out.println(places.size());
         Iterator<Place> iter = places.iterator();
 
         while (iter.hasNext()){
             place = iter.next();
+            System.out.println(place.getImgPath());
             bitmap = loadBitmapFromAsset(place.getImgPath());
             if (bitmap == null){
                 continue;
@@ -467,8 +470,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     public Bitmap loadBitmapFromAsset(String fileName){
         try{
-            InputStream inputStream = getAssets().open(Const.ASSETS_BITMAP_FOLDER + fileName);
-            bitmap = BitmapFactory.decodeStream(inputStream);
+            bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
             return bitmap;
         } catch (Exception e){
             e.printStackTrace();

@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 @Entity(tableName = "base", primaryKeys = {"lat", "lng"})
 public class Place implements Serializable {
@@ -47,11 +48,14 @@ public class Place implements Serializable {
     @ColumnInfo(name = "intro")
     public String intro;
 
+    @ColumnInfo(name = "icon")
+    public String icon;
+
     public Place(){
 
     }
 
-    public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom, String tags, String intro) {
+    public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom, String tags, String intro, String icon) {
         this.lat = lat;
         this.lng = lng;
         this.title = title;
@@ -64,6 +68,25 @@ public class Place implements Serializable {
         this.maxZoom = maxZoom;
         this.tags = tags;
         this.intro = intro;
+        this.icon = icon;
+    }
+
+
+    public Place(HashMap<String, Object> h){
+        this.lat = (Double) h.get("lat");
+        this.lng = (Double) h.get("lng");
+        this.title = (String) h.get("title");
+        this.imgPath = (String) h.get("imgPath");
+        this.description = (String) h.get("description");
+        this.address = (String) h.get("address");
+        this.link = (String) h.get("link");
+        this.phoneNumber = (String) h.get("phoneNumber");
+        this.minZoom = ((Long) h.get("minZoom")).intValue();
+        this.maxZoom = ((Long) h.get("maxZoom")).intValue();
+        this.tags = (String) h.get("tags");
+        this.intro = (String) h.get("intro");
+        this.icon = (String) h.get("icon");
+
     }
 
     public double getLat() {
@@ -161,4 +184,13 @@ public class Place implements Serializable {
     public void setIntro(String intro) {
         this.intro = intro;
     }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 }
+
