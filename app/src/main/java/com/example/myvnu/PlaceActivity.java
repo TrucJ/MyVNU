@@ -80,7 +80,7 @@ public class PlaceActivity extends AppCompatActivity {
         data = getIntent().getBundleExtra("data");
         if(data != null){
             item = (Place) data.getSerializable("item");
-            imageView.setImageBitmap(loadBitmapFromAsset(item.getImgPath()));
+            imageView.setImageBitmap(loadBitmapFromAsset(item.getImg()));
             title.setText(item.getTitle());
             desc.setText(item.getDescription());
             addr.setText(item.getAddress());

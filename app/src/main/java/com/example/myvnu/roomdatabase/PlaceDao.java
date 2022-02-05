@@ -17,13 +17,13 @@ public interface PlaceDao {
     @Query("SELECT * FROM base")
     List<Place> getAllDefaultPlaces();
 
-    @Query("SELECT img_path FROM base")
+    @Query("SELECT img FROM base")
     List<String> getAllImages();
 
     @Query("SELECT icon FROM base")
     List<String> getAllIcons();
 
-    @Query("SELECT lat, lng, title, img_path FROM base")
+    @Query("SELECT lat, lng, title, img FROM base")
     List<MapInfo> getAllDefaultMapInfo();
 
     @Query("SELECT * FROM base WHERE LOWER(title) like '%' || LOWER(:title) || '%'")

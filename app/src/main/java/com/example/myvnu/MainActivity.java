@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /* Upload db for only the first time
+        // UPLOAD - for the first run
+        /*
         places = PlaceDatabase.getDatabase(this).placeDao().getAllDefaultPlaces();
         System.out.println(places.size());
         Iterator<Place> iter = places.iterator();
@@ -101,15 +102,18 @@ public class MainActivity extends AppCompatActivity {
             mData.child("data").child(key).setValue(place);
         }
 
-
-        Place np = new Place(50.002, 50.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
-        mData.child("data").child("50p002+50p003").setValue(np);
-
-        Place np2 = new Place(30.002, 30.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
-        mData.child("data").child("30p002+30p003").setValue(np2);
-
-
          */
+
+
+
+     //   Place np = new Place(50.002, 50.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
+     //   mData.child("data").child("50p002+50p003").setValue(np);
+
+     //   Place np2 = new Place(30.002, 30.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
+     //   mData.child("data").child("30p002+30p003").setValue(np2);
+
+
+
 
     }
 

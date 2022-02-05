@@ -21,8 +21,11 @@ public class Place implements Serializable {
     @ColumnInfo(name = "title")
     public String title;
 
-    @ColumnInfo(name = "img_path")
-    public String imgPath;
+    @ColumnInfo(name = "icon")
+    public String icon;
+
+    @ColumnInfo(name = "img")
+    public String img;
 
     @ColumnInfo(name = "description")
     public String description;
@@ -36,47 +39,43 @@ public class Place implements Serializable {
     @ColumnInfo(name = "phone_number")
     public String phoneNumber;
 
-    @ColumnInfo(name = "min_zoom")
+    @ColumnInfo(name = "min_zoom_x4")
     public int minZoom;
 
-    @ColumnInfo(name = "max_zoom")
+    @ColumnInfo(name = "max_zoom_x4")
     public int maxZoom;
-
-    @ColumnInfo(name = "tags")
-    public String tags;
 
     @ColumnInfo(name = "intro")
     public String intro;
 
-    @ColumnInfo(name = "icon")
-    public String icon;
+    @ColumnInfo(name = "tags")
+    public String tags;
 
     public Place(){
 
     }
 
-    public Place(double lat, double lng, String title, String imgPath, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom, String tags, String intro, String icon) {
+    public Place(double lat, double lng, String title, String icon, String img, String description, String address, String link, String phoneNumber, int minZoom, int maxZoom, String intro, String tags) {
         this.lat = lat;
         this.lng = lng;
         this.title = title;
-        this.imgPath = imgPath;
+        this.icon = icon;
+        this.img = img;
         this.description = description;
         this.address = address;
         this.link = link;
         this.phoneNumber = phoneNumber;
         this.minZoom = minZoom;
         this.maxZoom = maxZoom;
-        this.tags = tags;
         this.intro = intro;
-        this.icon = icon;
+        this.tags = tags;
     }
-
 
     public Place(HashMap<String, Object> h){
         this.lat = (Double) h.get("lat");
         this.lng = (Double) h.get("lng");
         this.title = (String) h.get("title");
-        this.imgPath = (String) h.get("imgPath");
+        this.img = (String) h.get("img");
         this.description = (String) h.get("description");
         this.address = (String) h.get("address");
         this.link = (String) h.get("link");
@@ -86,7 +85,6 @@ public class Place implements Serializable {
         this.tags = (String) h.get("tags");
         this.intro = (String) h.get("intro");
         this.icon = (String) h.get("icon");
-
     }
 
     public double getLat() {
@@ -113,12 +111,20 @@ public class Place implements Serializable {
         this.title = title;
     }
 
-    public String getImgPath() {
-        return imgPath;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getDescription() {
@@ -169,14 +175,6 @@ public class Place implements Serializable {
         this.maxZoom = maxZoom;
     }
 
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
     public String getIntro() {
         return intro;
     }
@@ -185,12 +183,12 @@ public class Place implements Serializable {
         this.intro = intro;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getTags() {
+        return tags;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }
 

@@ -359,8 +359,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         while (iter.hasNext()){
             place = iter.next();
-            System.out.println(place.getImgPath());
-            bitmap = loadBitmapFromAsset(place.getImgPath());
+            System.out.println(place.getImg());
+            bitmap = loadBitmapFromAsset(place.getImg());
             if (bitmap == null){
                 continue;
             }

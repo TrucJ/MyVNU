@@ -37,7 +37,7 @@ public class TestLoadDBActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(cursor.hasNext()){
-                    String imgName = cursor.next().getImgPath();
+                    String imgName = cursor.next().getImg();
                     Log.d("imgName: ", imgName);
                     bmp = loadBitmapFromAsset(imgName);
                     imageViewTest.setImageBitmap(bmp);

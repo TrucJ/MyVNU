@@ -69,7 +69,7 @@ public class RecommendActivity extends AppCompatActivity {
     private void bindData() {
         Place item = null;
         if(items!=null) item = items.get(idx);
-        imageView.setImageBitmap(loadBitmapFromAsset(item.getImgPath()));
+        imageView.setImageBitmap(loadBitmapFromAsset(item.getImg()));
         title.setText(item.getTitle());
         desc.setText(item.getDescription());
         addr.setText(item.getAddress());
