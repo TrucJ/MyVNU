@@ -23,6 +23,18 @@ public class DBAction {
         return PlaceDatabase.getDatabase(context).placeDao().getAllImages();
     }
 
+    public List<String> getAllIcons(Context context){
+        return PlaceDatabase.getDatabase(context).placeDao().getAllIcons();
+    }
+
+    public List<String> getAllIntros(Context context){
+        return PlaceDatabase.getDatabase(context).placeDao().getAllIntros();
+    }
+
+    public List<String> getAllTags(Context context){
+        return PlaceDatabase.getDatabase(context).placeDao().getAllTags();
+    }
+
     public List<MapInfo> getAllDefaultMapInfo(Context context){
         return PlaceDatabase.getDatabase(context).placeDao().getAllDefaultMapInfo();
     }

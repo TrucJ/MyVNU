@@ -23,6 +23,12 @@ public interface PlaceDao {
     @Query("SELECT icon FROM base")
     List<String> getAllIcons();
 
+    @Query("SELECT intro FROM base")
+    List<String> getAllIntros();
+
+    @Query("SELECT tags FROM base")
+    List<String> getAllTags();
+
     @Query("SELECT lat, lng, title, img FROM base")
     List<MapInfo> getAllDefaultMapInfo();
 

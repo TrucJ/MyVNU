@@ -602,7 +602,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (Marker marker:placeMarkers) {
             Place place = dbAction.findPlaceWithLatLng(MapsActivity.this,
                     marker.getPosition().latitude, marker.getPosition().longitude);
-            System.out.println(place.getTitle() + Integer.toString(place.getMinZoom()));
             if (place.getMinZoom() <= zoomLevel * 4 && zoomLevel * 4 <= place.getMaxZoom()) {
                 marker.setVisible(true);
             }
