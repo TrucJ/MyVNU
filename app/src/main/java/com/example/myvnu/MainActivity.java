@@ -102,19 +102,13 @@ public class MainActivity extends AppCompatActivity {
             mData.child("data").child(key).setValue(place);
         }
 
+        Place np = new Place(50.002, 50.003, "test place", "nghia.ico", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
+        mData.child("data").child("50p002+50p003").setValue(np);
+
+        Place np2 = new Place(31.002, 41.003, "test place 2", "nghia.ico", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
+        mData.child("data").child("31p002+41p003").setValue(np2);
+
          */
-
-
-
-     //   Place np = new Place(50.002, 50.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
-     //   mData.child("data").child("50p002+50p003").setValue(np);
-
-     //   Place np2 = new Place(30.002, 30.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
-     //   mData.child("data").child("30p002+30p003").setValue(np2);
-
-
-
-
     }
 
     @Override
@@ -290,6 +284,8 @@ public class MainActivity extends AppCompatActivity {
                     // Lấy danh sách file ảnh mới nhất
                     ArrayList<String> latestImages = new ArrayList<String>();
                     latestImages.addAll(dbAction.getAllImages(MainActivity.this));
+                    ArrayList<String> latestIcons = new ArrayList<String>();
+                    latestIcons.addAll(dbAction.getAllIcons(MainActivity.this));
 
                     // Lấy danh sách file ảnh local hiện tại
                     ArrayList<String> currentImages = new ArrayList<String>();
@@ -303,8 +299,12 @@ public class MainActivity extends AppCompatActivity {
                     // Tạo danh sách file ảnh cần tải bổ sung
                     ArrayList<String> newImages = new ArrayList<String>();
                     for(int i = 0; i < latestImages.size(); i++){
-                        if(!currentImages.contains(latestImages.get(i)))
+                        if(latestImages.get(i) != null && !currentImages.contains(latestImages.get(i)))
                             newImages.add(latestImages.get(i));
+                    }
+                    for(int i = 0; i < latestIcons.size(); i++){
+                        if(latestIcons.get(i) != null && !currentImages.contains(latestIcons.get(i)))
+                            newImages.add(latestIcons.get(i));
                     }
 
                     System.out.println("Number images needs to be downloaded: " + Integer.toString(newImages.size()));
