@@ -73,30 +73,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                Const.PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, Const.PERMISSION_REQUEST_CODE);
         CACHE_DIR = getApplicationContext().getCacheDir().getAbsolutePath();
         IMG_PATH = CACHE_DIR + "/" + Const.IMAGE_FOLDER;
 
-        initAll();
-
-        mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+        initViews();
+        initCloudDatabaseRef();
+        initDatabase();
+        makeRecycleView();
+        setGoToMap();
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                latestVersion = (Double) snapshot.getValue();
-                System.out.println("Latest version = " + latestVersion);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                updateDatabase();
             }
         });
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference("assets.zip");
-        System.out.println(storageRef.toString());
 
         /* Upload db for only the first time
         places = PlaceDatabase.getDatabase(this).placeDao().getAllDefaultPlaces();
@@ -109,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             String key = ll.replace('.', 'p');
             mData.child("data").child(key).setValue(place);
         }
-         */
+
 
         Place np = new Place(50.002, 50.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
         mData.child("data").child("50p002+50p003").setValue(np);
@@ -117,37 +108,8 @@ public class MainActivity extends AppCompatActivity {
         Place np2 = new Place(30.002, 30.003, "test place", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "nơi này mới", "nghia.ico");
         mData.child("data").child("30p002+30p003").setValue(np2);
 
-        /*
-        final File localFile = new File(rootPath,"update.zip");
-        System.out.println(localFile.toString());
 
-        UpdateDatabase.unzip(getApplicationContext().getCacheDir().getAbsolutePath() + "/"+"update.zip", getApplicationContext().getCacheDir().getAbsolutePath() + "/");
-
-        storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " +localFile.toString());
-                //  updateDb(timestamp,localFile.toString(),position);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("firebase ",";local tem file not created  created " +exception.toString());
-            }
-        });
          */
-        // init Firebase DB ref and get the latest version
-
-        initDB();
-        makeRecycleView();
-        setGoToMap();
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase();
-            }
-        });
-
 
     }
 
@@ -186,29 +148,40 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeRecycleView() {
         items = CustomPlaceDatabase.getDatabase(this).customPlaceDao().getAllCustomPlaces();
-        if (items.size() == 0) {
-            Toast.makeText(this, "Hãy khám phá những địa điểm mới\n và thêm vào bộ sưu tập của bạn.", Toast.LENGTH_SHORT).show();
-        }
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(new MyAdapter(this, items));
     }
 
-    private void initAll() {
+    private void initViews() {
         recyclerView = findViewById(R.id.recyclerView);
         btnVNU = (ConstraintLayout) findViewById(R.id.btnVNU);
         btnPos = (ConstraintLayout) findViewById(R.id.btnPos);
         btnUpdate = (Button) findViewById(R.id.buttonUpdate);
-
     }
 
-    private void initDB() {
+    private void initCloudDatabaseRef(){
+        mData = FirebaseDatabase.getInstance().getReference();
+        mData.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                latestVersion = (Double) snapshot.getValue();
+                System.out.println("Latest version = " + latestVersion);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void initDatabase() {
         //DBAction dbAction = new DBAction();
         PlaceDatabase.getDatabase(this).placeDao().findPlaceWithTitle("alo");
         if(checkEmptyDB()){
             System.out.println("DB is empty");
-            populateDB();
+            populateDatabaseFromAsset();
             currentVersion = 1.0f;
         }
         else{
@@ -240,17 +213,12 @@ public class MainActivity extends AppCompatActivity {
         return Double.parseDouble(v);
     }
 
-    private void populateDB() {
+    private void populateDatabaseFromAsset() {
         File rootPath = new File(CACHE_DIR + "/");
         if(!rootPath.exists()) {
             rootPath.mkdirs();
         }
-        /*
-        File dbPath = new File(getApplicationContext().getCacheDir().getAbsolutePath() + "/database");
-        if(!dbPath.exists()) {
-            dbPath.mkdirs();
-        }
-        */
+
         File placePath = new File(CACHE_DIR + "/places");
         if(!placePath.exists()) {
             placePath.mkdirs();
@@ -293,13 +261,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void upload(){
-        DBAction dbAction = new DBAction();
-        List<Place> places = dbAction.getAllDefaultPlaces(MainActivity.this);
-        System.out.println("Size of places " + Integer.toString(places.size()));
-        //mData.child("data")
-    }
-
     public void updateDatabase(){
         System.out.println("CurrenVersion: " + Double.toString(currentVersion));
         System.out.println("LatestVersion: " + Double.toString(latestVersion));
@@ -309,8 +270,6 @@ public class MainActivity extends AppCompatActivity {
         else{
             Toast.makeText(this, "Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi.", Toast.LENGTH_SHORT).show();
             DBAction dbAction = new DBAction();
-
-            currentVersion = latestVersion;
 
             // Tạo cơ sở dữ liệu mới nhất
             mData.child("data").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -322,15 +281,10 @@ public class MainActivity extends AppCompatActivity {
                        HashMap<String, Object> h = (HashMap<String, Object>) value;
                        Place p = new Place(h);
                        dbAction.insert(MainActivity.this, p);
-                       //System.out.println("insert ok: " + Double.toString(p.getLng()));
-
                    });
                     // Lấy danh sách file ảnh mới nhất
                     ArrayList<String> latestImages = new ArrayList<String>();
                     latestImages.addAll(dbAction.getAllImages(MainActivity.this));
-                    //for(int i = 0; i < latestImages.size(); i++)
-                    //    System.out.println(latestImages.get(i));
-
 
                     // Lấy danh sách file ảnh local hiện tại
                     ArrayList<String> currentImages = new ArrayList<String>();
@@ -341,13 +295,7 @@ public class MainActivity extends AppCompatActivity {
                         currentImages.add(files[i].getName());
                     }
 
-                    System.out.println(Integer.toString(currentImages.size()));
-                    for(int i = 0; i < currentImages.size(); i++)
-                        System.out.println(currentImages.get(i));
-
-
-
-                    // Lấy danh sách file ảnh cần tải bổ sung
+                    // Tạo danh sách file ảnh cần tải bổ sung
                     ArrayList<String> newImages = new ArrayList<String>();
                     for(int i = 0; i < latestImages.size(); i++){
                         if(!currentImages.contains(latestImages.get(i)))
@@ -358,17 +306,15 @@ public class MainActivity extends AppCompatActivity {
                     for(int i = 0; i < newImages.size(); i++)
                         System.out.println(newImages.get(i));
 
-
-
                     // Tải xuống các file ảnh bổ sung
                     for(int i = 0; i < newImages.size(); i++){
                         downloadImage(newImages.get(i));
                     }
 
                     // Cập nhật xong
-                    writeVersionToTextFile(latestVersion);
+                    writeVersionFile(latestVersion);
+                    currentVersion = latestVersion;
                     Toast.makeText(MainActivity.this, "Đã cập nhật xong!.", Toast.LENGTH_SHORT).show();
-
                 }
             });
 
@@ -377,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public Bitmap loadBitmapFromAsset(String fileName) {
         try {
             InputStream inputStream = getAssets().open(fileName);
@@ -387,6 +334,8 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+     */
 
     public void downloadImage(String filename) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -414,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /* FOR UPDATE FULL PACKAGE - FUTURE WORKS
     public void downloadUpdatePackage() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference("assets.zip");
@@ -480,7 +430,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void writeVersionToTextFile(double _version){
+     */
+
+    public void writeVersionFile(double _version){
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(CACHE_DIR + "/places/version.txt", "UTF-8");
