@@ -102,13 +102,14 @@ public class MainActivity extends AppCompatActivity {
             mData.child("data").child(key).setValue(place);
         }
 
-        Place np = new Place(50.002, 50.003, "test place", "nghia.ico", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
+
+        Place np = new Place(50.002, 50.003, "test place", "nghia.jpg", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
         mData.child("data").child("50p002+50p003").setValue(np);
 
-        Place np2 = new Place(31.002, 41.003, "test place 2", "nghia.ico", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
+        Place np2 = new Place(31.002, 41.003, "test place 2", "nghia.jpg", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 60,76,"alo", "#địa điểm mới #vui chơi" );
         mData.child("data").child("31p002+41p003").setValue(np2);
+        */
 
-         */
     }
 
     @Override
