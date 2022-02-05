@@ -5,7 +5,7 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <!--uses-permission android:name="android.permission.CAMERA" remove because of revoking/-->
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature
         android:name="android.hardware.camera.ar"
         android:required="true" />
@@ -41,9 +41,7 @@
             android:value="required" />
         <activity
             android:name=".ArCameraActivity"
-            android:exported="true">
-
-        </activity>>
+            android:exported="true"/>
         <activity
             android:name=".RecommendActivity"
             android:exported="true" />
@@ -78,7 +76,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
