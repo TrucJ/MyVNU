@@ -80,7 +80,7 @@ public class PlaceActivity extends AppCompatActivity {
         data = getIntent().getBundleExtra("data");
         if(data != null){
             item = (Place) data.getSerializable("item");
-            imageView.setImageBitmap(loadBitmapFromAsset(item.getImg()));
+            imageView.setImageBitmap(loadBitmapFromCache(item.getImg()));
             title.setText(item.getTitle());
             desc.setText(item.getDescription());
             addr.setText(item.getAddress());
@@ -89,10 +89,9 @@ public class PlaceActivity extends AppCompatActivity {
         }
 
     }
-    private Bitmap loadBitmapFromAsset(String fileName){
+    public Bitmap loadBitmapFromCache(String fileName){
         try{
-            InputStream inputStream = getAssets().open(Const.ASSETS_BITMAP_FOLDER + fileName);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            Bitmap bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
             return bitmap;
         } catch (Exception e){
             e.printStackTrace();
