@@ -367,7 +367,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         while (iter.hasNext()){
             place = iter.next();
             System.out.println(place.getImg());
-            bitmap = loadBitmapFromAsset(place.getImg());
+            bitmap = loadBitmapFromCache(place.getImg());
             if (bitmap == null){
                 continue;
             }
@@ -475,7 +475,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return null;
         }
     }
-    public Bitmap loadBitmapFromAsset(String fileName){
+    public Bitmap loadBitmapFromCache(String fileName){
         try{
             bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
             return bitmap;

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myvnu">
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    
     <uses-feature
         android:name="android.hardware.camera.ar"
         android:required="true" />
@@ -36,12 +38,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyVNU">
+        <activity
+            android:name=".UpdateActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
+
         <activity
             android:name=".ArCameraActivity"
             android:exported="true"/>
+
         <activity
             android:name=".RecommendActivity"
             android:exported="true" />
@@ -81,7 +89,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <provider

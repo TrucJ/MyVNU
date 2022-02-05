@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UpdateActivity"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="100sp"
+        android:paddingLeft="50sp">
+        <TextView
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:text="Phiên bản hiện tại: ">
+
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewCurrentVersion">
+
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30sp"
+        android:paddingLeft="50sp">
+        <TextView
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:text="Phiên bản mới nhất:"
+            >
+
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewLatestVersion"
+            android:text="Đang kiểm tra...">
+
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30sp"
+        android:gravity="center"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonUpdateReal"
+                android:text="Cập nhật"
+                android:textAlignment="center"/>
+
+            <Button
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonReturnHome"
+                android:text="Trở về"
+                android:textAlignment="center"
+                android:paddingRight="10sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:paddingTop="50sp"
+            android:layout_width="300sp"
+            android:layout_height="400sp"
+            android:id="@+id/textViewUpdateStatus"
+            android:text="Chi tiết cập nhật..."
+            android:scrollbars="vertical">
+        </TextView>
+
+    </LinearLayout>
+</LinearLayout>
