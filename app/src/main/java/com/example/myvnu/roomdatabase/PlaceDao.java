@@ -32,6 +32,9 @@ public interface PlaceDao {
     @Query("SELECT lat, lng, title, img FROM base")
     List<MapInfo> getAllDefaultMapInfo();
 
+    @Query("SELECT * FROM base WHERE tags like '%' || :tag || '%'")
+    List<Place> findPlaceWithTag(String tag);
+
     @Query("SELECT * FROM base WHERE LOWER(title) like '%' || LOWER(:title) || '%'")
     List<Place> findPlaceWithTitle(String title);
 
