@@ -102,8 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Place np = new Place(11.638248, 108.947897, "test place", "nghia.jpg", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 40,100,"alo", "#địa điểm mới #vui chơi" );
-        mData.child("data").child("11p638248+108p947897").setValue(np);
+
         */
     }
 

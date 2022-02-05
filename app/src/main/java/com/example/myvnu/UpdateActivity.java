@@ -124,6 +124,9 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateDatabase(){
+        //Place np = new Place(10.584389, 107.063641, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "addr", "","0900", 28,100,"alo", "#địa điểm mới #vui chơi" );
+        //mData.child("data").child("10p584389+108p063641").setValue(np);
+
         status = status + ("Phiên bản hiện tại: " + Double.toString(currentVersion)) + "\n";
         status = status + ("Phiên bản mới nhất: " + Double.toString(latestVersion)) + "\n";
         if(currentVersion == latestVersion){
