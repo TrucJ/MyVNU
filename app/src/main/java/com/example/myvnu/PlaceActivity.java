@@ -6,17 +6,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.example.myvnu.roomdatabase.CustomPlace;
 import com.example.myvnu.roomdatabase.Place;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class PlaceActivity extends AppCompatActivity {
@@ -32,6 +31,7 @@ public class PlaceActivity extends AppCompatActivity {
     LinearLayout downLayout;
     Bundle data;
     Place item;
+    ImageButton btnHome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +63,42 @@ public class PlaceActivity extends AppCompatActivity {
         link = (EditText) findViewById(R.id.linkPlace);
         img = (ImageView)findViewById(R.id.imagePlace);
         upLayout = (LinearLayout)findViewById(R.id.upLayout);
+        btnHome = (ImageButton)findViewById(R.id.btnHomePlace);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(PlaceActivity.this, "Về trang chủ", Toast.LENGTH_SHORT);
+                toast.show();
+                Intent intent = new Intent(PlaceActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
         downLayout = (LinearLayout) findViewById(R.id.downLayout);
+        upLayout.setOnTouchListener(new OnSwipeTouchListener(PlaceActivity.this){
+            public void onSwipeTop() {
+                upLayout.setVisibility(View.INVISIBLE);
+                downLayout.setVisibility(View.VISIBLE);
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+
+            }
+        });
+        downLayout.setOnTouchListener(new OnSwipeTouchListener(PlaceActivity.this){
+            public void onSwipeTop() {
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+                downLayout.setVisibility(View.INVISIBLE);
+                upLayout.setVisibility(View.VISIBLE);
+            }
+        });
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +115,7 @@ public class PlaceActivity extends AppCompatActivity {
         data = getIntent().getBundleExtra("data");
         if(data != null){
             item = (Place) data.getSerializable("item");
-            imageView.setImageBitmap(loadBitmapFromAsset(item.getImg()));
+            imageView.setImageBitmap(loadBitmapFromCache(item.getImg()));
             title.setText(item.getTitle());
             desc.setText(item.getDescription());
             addr.setText(item.getAddress());
@@ -89,10 +124,9 @@ public class PlaceActivity extends AppCompatActivity {
         }
 
     }
-    private Bitmap loadBitmapFromAsset(String fileName){
+    public Bitmap loadBitmapFromCache(String fileName){
         try{
-            InputStream inputStream = getAssets().open(Const.ASSETS_BITMAP_FOLDER + fileName);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            Bitmap bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
             return bitmap;
         } catch (Exception e){
             e.printStackTrace();

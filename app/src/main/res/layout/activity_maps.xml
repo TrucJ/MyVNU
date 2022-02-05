@@ -34,7 +34,7 @@
         tools:context=".MapsActivity" />
 
     <ImageButton
-        android:id="@+id/btnHome"
+        android:id="@+id/btnHomeCP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -50,13 +50,13 @@
         android:id="@+id/btnVoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/round_corner"
+        android:onClick="convert2Voice"
         android:src="@drawable/ic_baseline_keyboard_voice_24"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintTop_toBottomOf="@+id/searchView"
-        android:onClick="convert2Voice"/>
+        map:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <ImageButton
         android:id="@+id/btnGetVNU"
@@ -96,10 +96,50 @@
         android:layout_width="139dp"
         android:layout_height="43dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/button_background_green1"
         android:text="THÔNG TIN"
         android:visibility="invisible"
         map:layout_constraintStart_toStartOf="@+id/map"
         map:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <LinearLayout
+        android:id="@+id/cameraLayout"
+        android:layout_width="330dp"
+        android:layout_height="200dp"
+        android:background="#fff"
+        android:orientation="vertical"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/searchView"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="290dp"
+            android:src="@drawable/ic_baseline_cancel_24"
+            android:onClick="exitOption"/>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_style"
+            android:text="CAMERA AR"
+            android:textColor="#fff"
+            android:onClick="arCamera"/>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_style"
+            android:text="CAMERA THƯỜNG"
+            android:textColor="#fff"
+            android:onClick="camera"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

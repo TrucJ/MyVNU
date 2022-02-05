@@ -7,6 +7,7 @@
     tools:context=".RecommendActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/discoverLayout"
         android:layout_width="350dp"
         android:layout_height="600dp"
         android:layout_marginTop="10dp"
@@ -27,8 +28,8 @@
 
         <LinearLayout
             android:id="@+id/upLayout2"
-            android:layout_width="419dp"
-            android:layout_height="30dp"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
             android:background="@drawable/bottom_background_light_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,11 +41,12 @@
                 android:layout_height="34dp"
                 android:onClick="setUpLayout"
                 app:srcCompat="@drawable/ic_baseline_keyboard_arrow_up_24" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/downLayout2"
-            android:layout_width="419dp"
+            android:layout_width="350dp"
             android:layout_height="440dp"
             android:background="@drawable/bottom_background_light_green"
             android:fitsSystemWindows="true"
@@ -65,7 +67,7 @@
                 android:layout_width="360dp"
                 android:layout_height="320dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <androidx.core.widget.NestedScrollView
@@ -216,28 +218,28 @@
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:paddingLeft="25dp">
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/btnViewPlace2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="120dp"
                     android:background="@drawable/button_style"
                     android:minWidth="140dp"
                     android:text="XEM VÍ TRÍ"
                     android:textColor="#fff"
                     android:textSize="10sp" />
             </LinearLayout>
-
         </LinearLayout>
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -258,20 +260,30 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginBottom="8dp"
+        android:onClick="setPrev"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24"
-        android:onClick="setPrev"/>
+        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24" />
 
     <ImageView
         android:id="@+id/imageView72"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginBottom="8dp"
+        android:onClick="setNext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
-        android:onClick="setNext"/>
+        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+    <ImageButton
+        android:id="@+id/btnHomeRe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/round_corner"
+        android:src="@drawable/ic_baseline_home_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

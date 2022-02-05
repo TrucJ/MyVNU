@@ -1,7 +1,5 @@
 package com.example.myvnu;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -13,7 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.admin.SystemUpdatePolicy;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,15 +25,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -61,7 +56,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Place place;
     private Bitmap bitmap;
     private LatLng vnuhcm;
-
+    private LinearLayout cameraLayout;
 
 
     private String pictureImagePath;
@@ -132,7 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setHome() {
-        btnHome = (ImageButton)findViewById(R.id.btnHome);
+        btnHome = (ImageButton)findViewById(R.id.btnHomeCP);
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,23 +152,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setCheckIn(){
         btnCheckIn = (ImageButton) findViewById(R.id.btnCheckIn);
+        cameraLayout = (LinearLayout)findViewById(R.id.cameraLayout);
         initLaucher();
-
+        pictureImagePath = getApplicationContext().getCacheDir().getAbsolutePath() + "/" + Const.TMP_IMAGE_FILE;
         btnCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                pictureImagePath = getApplicationContext().getCacheDir().getAbsolutePath() + "/" + Const.TMP_IMAGE_FILE;
-                Log.d("path", pictureImagePath);
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                imgFile = new File(pictureImagePath);
-
-                Uri uri = FileProvider.getUriForFile(MapsActivity.this, BuildConfig.APPLICATION_ID + ".provider", imgFile);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                activityResultLauncher.launch(cameraIntent);
+                cameraLayout.setVisibility(View.VISIBLE);
             }
         });
 
+    }
+    public void exitOption(View view){
+        cameraLayout.setVisibility(View.INVISIBLE);
+    }
+    public void arCamera(View view){
+        Intent intent = new Intent(MapsActivity.this, ArCameraActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("CNTN19", pictureImagePath);
+        bundle.putDouble("lat", selectedMarker.getPosition().latitude);
+        bundle.putDouble("lng", selectedMarker.getPosition().longitude);
+        intent.putExtra("BUNDLE", bundle);
+        startActivity(intent);
+    }
+    public void camera(View view){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        imgFile = new File(pictureImagePath);
+        Uri uri = FileProvider.getUriForFile(MapsActivity.this, BuildConfig.APPLICATION_ID + ".provider", imgFile);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        activityResultLauncher.launch(cameraIntent);
     }
     public void initLaucher() {
         activityResultLauncher = registerForActivityResult(
@@ -360,7 +367,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         while (iter.hasNext()){
             place = iter.next();
             System.out.println(place.getIcon());
-            bitmap = loadBitmapFromAsset(place.getIcon());
+            bitmap = loadBitmapFromCache(place.getIcon());
             if (bitmap == null){
                 continue;
             }
@@ -492,7 +499,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return null;
         }
     }
-    public Bitmap loadBitmapFromAsset(String fileName){
+    public Bitmap loadBitmapFromCache(String fileName){
         try{
             bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
             return bitmap;

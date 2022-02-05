@@ -43,6 +43,10 @@ public class DBAction {
         return PlaceDatabase.getDatabase(context).placeDao().findPlaceWithTitle(title);
     }
 
+    public List<Place> findPlaceWithTag(Context context, String tag){
+        return PlaceDatabase.getDatabase(context).placeDao().findPlaceWithTag(tag);
+    }
+
     public Place findPlaceWithLatLng(Context context, double lat, double lng){
         return PlaceDatabase.getDatabase(context).placeDao().findPlaceWithLatLng(lat, lng);
     }

@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseReference mData;
     StorageReference storageRef;
-    double currentVersion, latestVersion;
     String CACHE_DIR;
     List<Place> places;
 
@@ -78,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         IMG_PATH = CACHE_DIR + "/" + Const.IMAGE_FOLDER;
 
         initViews();
-        initCloudDatabaseRef();
         initDatabase();
         makeRecycleView();
         setGoToMap();
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDatabase();
+                Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -103,8 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Place np = new Place(11.638248, 108.947897, "test place", "nghia.jpg", "test.jpg", "Đây là địa điểm mới", "addr", "","0900", 40,100,"alo", "#địa điểm mới #vui chơi" );
-        mData.child("data").child("11p638248+108p947897").setValue(np);
+
         */
     }
 
@@ -156,21 +154,6 @@ public class MainActivity extends AppCompatActivity {
         btnUpdate = (Button) findViewById(R.id.buttonUpdate);
     }
 
-    private void initCloudDatabaseRef(){
-        mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("version").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                latestVersion = (Double) snapshot.getValue();
-                System.out.println("Latest version = " + latestVersion);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     private void initDatabase() {
         //DBAction dbAction = new DBAction();
@@ -178,11 +161,11 @@ public class MainActivity extends AppCompatActivity {
         if(checkEmptyDB()){
             System.out.println("DB is empty");
             populateDatabaseFromAsset();
-            currentVersion = 1.0f;
+            //currentVersion = 1.0f;
         }
         else{
             System.out.println("DB is existed");
-            currentVersion = checkVersion();
+            //currentVersion = checkVersion();
         }
     }
 
@@ -193,20 +176,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         else
             return true;
-    }
-
-    private double checkVersion() {
-        File versionFile = new File( CACHE_DIR + "/places/version.txt");
-        String v;
-        try (Scanner input = new Scanner(versionFile)) {
-            v = input.nextLine();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return 0.9f;
-        }
-        System.out.println("Local version = " + v);
-        System.out.println("Cloud version = " + latestVersion);
-        return Double.parseDouble(v);
     }
 
     private void populateDatabaseFromAsset() {
@@ -257,99 +226,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void updateDatabase(){
-        System.out.println("CurrenVersion: " + Double.toString(currentVersion));
-        System.out.println("LatestVersion: " + Double.toString(latestVersion));
-        if(currentVersion == latestVersion){
-            Toast.makeText(this, "Đây là phiên bản mới nhất.", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi.", Toast.LENGTH_SHORT).show();
-            DBAction dbAction = new DBAction();
 
-            // Tạo cơ sở dữ liệu mới nhất
-            mData.child("data").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                   HashMap<String, Object> dat = (HashMap<String, Object>) task.getResult().getValue();
-                   dat.forEach((key, value) -> {
-                       //System.out.println(key);
-                       HashMap<String, Object> h = (HashMap<String, Object>) value;
-                       Place p = new Place(h);
-                       dbAction.insert(MainActivity.this, p);
-                   });
-                    // Lấy danh sách file ảnh mới nhất
-                    ArrayList<String> latestImages = new ArrayList<String>();
-                    latestImages.addAll(dbAction.getAllImages(MainActivity.this));
-                    ArrayList<String> latestIcons = new ArrayList<String>();
-                    latestIcons.addAll(dbAction.getAllIcons(MainActivity.this));
-
-                    // Lấy danh sách file ảnh local hiện tại
-                    ArrayList<String> currentImages = new ArrayList<String>();
-                    String imgPath = getApplicationContext().getCacheDir().getAbsolutePath() + "/places";
-                    File directory = new File(imgPath);
-                    File[] files = directory.listFiles();
-                    for(int i = 0; i < files.length; i++){
-                        currentImages.add(files[i].getName());
-                    }
-
-                    // Tạo danh sách file ảnh cần tải bổ sung
-                    ArrayList<String> newImages = new ArrayList<String>();
-                    for(int i = 0; i < latestImages.size(); i++){
-                        if(latestImages.get(i) != null && !currentImages.contains(latestImages.get(i)))
-                            newImages.add(latestImages.get(i));
-                    }
-                    for(int i = 0; i < latestIcons.size(); i++){
-                        if(latestIcons.get(i) != null && !currentImages.contains(latestIcons.get(i)))
-                            newImages.add(latestIcons.get(i));
-                    }
-
-                    System.out.println("Number images needs to be downloaded: " + Integer.toString(newImages.size()));
-                    for(int i = 0; i < newImages.size(); i++)
-                        System.out.println(newImages.get(i));
-
-                    // Tải xuống các file ảnh bổ sung
-                    for(int i = 0; i < newImages.size(); i++){
-                        downloadImage(newImages.get(i));
-                    }
-
-                    // Cập nhật xong
-                    writeVersionFile(latestVersion);
-                    currentVersion = latestVersion;
-                    Toast.makeText(MainActivity.this, "Đã cập nhật xong!.", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-
-        }
-    }
-
-    public void downloadImage(String filename) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference("images/" + filename);
-        StorageReference islandRef = storageRef;
-
-        File rootPath = new File(CACHE_DIR, "places");
-        if(!rootPath.exists()) {
-            rootPath.mkdirs();
-        }
-
-        final File localFile = new File(rootPath,filename);
-
-        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " + localFile.toString());
-                //  updateDb(timestamp,localFile.toString(),position);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("firebase ",";local tem file not created  created " +exception.toString());
-            }
-        });
-    }
 
     /* FOR UPDATE FULL PACKAGE - FUTURE WORKS
     public void downloadUpdatePackage() {
@@ -420,18 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
      */
 
-    public void writeVersionFile(double _version){
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(CACHE_DIR + "/places/version.txt", "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        writer.println(Double.toString(_version));
-        writer.close();
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -445,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                     if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
                         // perform action when allow permission success
                     } else {
-                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
