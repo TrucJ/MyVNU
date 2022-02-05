@@ -163,12 +163,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCloudDatabaseRef(){
         mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+        mData.child("version").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 latestVersion = (Double) snapshot.getValue();
                 System.out.println("Latest version = " + latestVersion);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -302,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                             newImages.add(latestImages.get(i));
                     }
 
-                    System.out.println(Integer.toString(newImages.size()));
+                    System.out.println("Number images needs to be downloaded: " + Integer.toString(newImages.size()));
                     for(int i = 0; i < newImages.size(); i++)
                         System.out.println(newImages.get(i));
 
@@ -322,20 +323,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-    /*
-    public Bitmap loadBitmapFromAsset(String fileName) {
-        try {
-            InputStream inputStream = getAssets().open(fileName);
-            Bitmap bmp = BitmapFactory.decodeStream(inputStream);
-            return bmp;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-     */
 
     public void downloadImage(String filename) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
