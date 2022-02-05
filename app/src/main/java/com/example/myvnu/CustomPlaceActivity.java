@@ -10,8 +10,10 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.myvnu.roomdatabase.CustomPlace;
 import com.example.myvnu.roomdatabase.CustomPlaceDatabase;
@@ -36,6 +38,7 @@ public class CustomPlaceActivity extends AppCompatActivity {
     LinearLayout downLayout;
     Bundle data;
     CustomPlace item;
+    ImageButton btnHome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,6 +178,41 @@ public class CustomPlaceActivity extends AppCompatActivity {
         layout2 = (LinearLayout) findViewById(R.id.layout2Btn);
         upLayout = (LinearLayout)findViewById(R.id.upLayout2);
         downLayout = (LinearLayout) findViewById(R.id.downLayout2);
+        btnHome = (ImageButton)findViewById(R.id.btnHomeCP);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(CustomPlaceActivity.this, "Về trang chủ", Toast.LENGTH_SHORT);
+                toast.show();
+                Intent intent = new Intent(CustomPlaceActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        upLayout.setOnTouchListener(new OnSwipeTouchListener(CustomPlaceActivity.this){
+            public void onSwipeTop() {
+                upLayout.setVisibility(View.INVISIBLE);
+                downLayout.setVisibility(View.VISIBLE);
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+
+            }
+        });
+        downLayout.setOnTouchListener(new OnSwipeTouchListener(CustomPlaceActivity.this){
+            public void onSwipeTop() {
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+                downLayout.setVisibility(View.INVISIBLE);
+                upLayout.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     public Bitmap loadImage(String imgName){

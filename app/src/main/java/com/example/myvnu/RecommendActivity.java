@@ -2,6 +2,7 @@ package com.example.myvnu;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -36,10 +38,12 @@ public class RecommendActivity extends AppCompatActivity {
     private DBAction dbAction = new DBAction();
     LinearLayout upLayout;
     LinearLayout downLayout;
+    ImageButton btnHome;
     Bundle data;
     ArrayList<Place> items;
     int idx = 0;
     private TextToSpeech siri;
+    private ConstraintLayout discoverLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +111,63 @@ public class RecommendActivity extends AppCompatActivity {
         link = (EditText) findViewById(R.id.linkPlace2);
         img = (ImageView)findViewById(R.id.imagePlace2);
         upLayout = (LinearLayout)findViewById(R.id.upLayout2);
+        upLayout.setOnTouchListener(new OnSwipeTouchListener(RecommendActivity.this){
+            public void onSwipeTop() {
+                upLayout.setVisibility(View.INVISIBLE);
+                downLayout.setVisibility(View.VISIBLE);
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+
+            }
+        });
         downLayout = (LinearLayout) findViewById(R.id.downLayout2);
+        downLayout.setOnTouchListener(new OnSwipeTouchListener(RecommendActivity.this){
+            public void onSwipeTop() {
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+                downLayout.setVisibility(View.INVISIBLE);
+                upLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        btnHome = (ImageButton)findViewById(R.id.btnHomeRe);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(RecommendActivity.this, "Về trang chủ", Toast.LENGTH_SHORT);
+                toast.show();
+                Intent intent = new Intent(RecommendActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        discoverLayout = (ConstraintLayout)findViewById(R.id.discoverLayout);
+        discoverLayout.setOnTouchListener(new OnSwipeTouchListener(RecommendActivity.this){
+            public void onSwipeTop() {
+
+            }
+            public void onSwipeRight() {
+                if(idx > 0) {
+                    idx--;
+                    bindData();
+                }
+            }
+            public void onSwipeLeft() {
+                if(idx < items.size() - 1) {
+                    idx++;
+                    bindData();
+                }
+            }
+            public void onSwipeBottom() {
+
+            }
+        });
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

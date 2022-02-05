@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
@@ -29,6 +30,7 @@ import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.util.Log;
 import android.view.PixelCopy;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -60,19 +62,29 @@ import javax.security.auth.callback.Callback;
 
 public class ArCameraActivity extends AppCompatActivity {
     private ModelRenderable modelRenderable;
+    private ModelRenderable modelRenderable2;
+    private ModelRenderable modelRenderable3;
     private Texture texture;
-    private boolean isAdded = false;
+    //private boolean isAdded = false;
     private final HashMap<AugmentedFace, AugmentedFaceNode> faceNodeMap = new HashMap<>();
     private Frame frame;
-    public ImageView taolao;
     private CustomArFragment customArFragment;
     private String pictureImagePath;
+    private double lat, lng;
+    private Button btnFF, btnYG, btnBG;
+    private AugmentedFaceNode augmentedFaceMode, node;
+    private AugmentedFace face;
+    private boolean isChange = false;
+    private int option = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ar_camera);
-        taolao = findViewById(R.id.taolao);
         customArFragment = (CustomArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+        btnFF = (Button)findViewById(R.id.btnFF);
+        btnYG = (Button) findViewById(R.id.btnYG);
+        btnBG = (Button)findViewById(R.id.btnBG);
+        getData();
         ModelRenderable.builder()
                 .setSource(this, R.raw.fox_face)
                 .build()
@@ -80,6 +92,32 @@ public class ArCameraActivity extends AppCompatActivity {
                     this.modelRenderable = rendarable;
                     this.modelRenderable.setShadowCaster(false);
                     this.modelRenderable.setShadowReceiver(false);
+
+                })
+                .exceptionally(throwable -> {
+                    Toast.makeText(this, "error loading model", Toast.LENGTH_SHORT).show();
+                    return null;
+                });
+        ModelRenderable.builder()
+                .setSource(this, R.raw.yellow_sunglasses)
+                .build()
+                .thenAccept(rendarable -> {
+                    this.modelRenderable2 = rendarable;
+                    this.modelRenderable2.setShadowCaster(false);
+                    this.modelRenderable2.setShadowReceiver(false);
+
+                })
+                .exceptionally(throwable -> {
+                    Toast.makeText(this, "error loading model", Toast.LENGTH_SHORT).show();
+                    return null;
+                });
+        ModelRenderable.builder()
+                .setSource(this, R.raw.sunglasses)
+                .build()
+                .thenAccept(rendarable -> {
+                    this.modelRenderable3 = rendarable;
+                    this.modelRenderable3.setShadowCaster(false);
+                    this.modelRenderable3.setShadowReceiver(false);
 
                 })
                 .exceptionally(throwable -> {
@@ -106,27 +144,48 @@ public class ArCameraActivity extends AppCompatActivity {
             Collection<AugmentedFace> augmentedFaces = frame.getUpdatedTrackables(AugmentedFace.class);
 
             for (AugmentedFace augmentedFace : augmentedFaces) {
-                if (isAdded) return;
-
-                AugmentedFaceNode augmentedFaceMode = new AugmentedFaceNode(augmentedFace);
-                augmentedFaceMode.setParent(customArFragment.getArSceneView().getScene());
-                augmentedFaceMode.setFaceRegionsRenderable(modelRenderable);
-                augmentedFaceMode.setFaceMeshTexture(texture);
-                faceNodeMap.put(augmentedFace, augmentedFaceMode);
-                isAdded = true;
-
+                //if (isAdded) return;
+                if (!faceNodeMap.containsKey(augmentedFace)) {
+                    augmentedFaceMode = new AugmentedFaceNode(augmentedFace);
+                    augmentedFaceMode.setParent(customArFragment.getArSceneView().getScene());
+                    augmentedFaceMode.setFaceRegionsRenderable(modelRenderable);
+                    augmentedFaceMode.setFaceMeshTexture(texture);
+                    faceNodeMap.put(augmentedFace, augmentedFaceMode);
+                }
+                else if(isChange){
+                    if(option == 1){
+                        faceNodeMap.get(augmentedFace).setFaceRegionsRenderable(modelRenderable);
+                    }
+                    else if(option == 2){
+                        faceNodeMap.get(augmentedFace).setFaceRegionsRenderable(modelRenderable2);
+                    }
+                    else if(option == 3){
+                        faceNodeMap.get(augmentedFace).setFaceRegionsRenderable(modelRenderable3);
+                    }
+                }
+                //isAdded = true;
+                isChange = false;
                 // Remove any AugmentedFaceNodes associated with an AugmentedFace that stopped tracking.
                 Iterator<Map.Entry<AugmentedFace, AugmentedFaceNode>> iterator = faceNodeMap.entrySet().iterator();
                 Map.Entry<AugmentedFace, AugmentedFaceNode> entry = iterator.next();
-                AugmentedFace face = entry.getKey();
+                face = entry.getKey();
                 while (face.getTrackingState() == TrackingState.STOPPED) {
-                    AugmentedFaceNode node = entry.getValue();
+                    node = entry.getValue();
                     node.setParent(null);
                     iterator.remove();
                 }
             }
         });
     }
+
+    private void getData() {
+        Bundle bundle = getIntent().getBundleExtra("BUNDLE");
+
+        pictureImagePath = bundle.getString("CNTN19");
+        lat = bundle.getDouble("lat");
+        lng = bundle.getDouble("lng");
+    }
+
     private String generateFilename() {
 
         //현재시간을 기준으로 파일 이름 생성
@@ -188,8 +247,6 @@ public class ArCameraActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             PixelCopy.request(view, bitmap, (copyResult) -> {
                 if (copyResult == PixelCopy.SUCCESS) {
-                    taolao.setImageBitmap(bitmap);
-                    //storeImage(bitmap);
                     pictureImagePath = getApplicationContext().getCacheDir().getAbsolutePath() + "/" + Const.TMP_IMAGE_FILE;
                     try {
                         saveBitmapToDisk(bitmap, pictureImagePath);
@@ -200,17 +257,47 @@ public class ArCameraActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     Log.d("huheo", "picture: "+pictureImagePath);
                     bundle.putString("CNTN19", pictureImagePath);
-                    bundle.putDouble("lat", 10.2);
-                    bundle.putDouble("lng", 10.2);
+                    bundle.putDouble("lat", lat);
+                    bundle.putDouble("lng", lng);
                     intent.putExtra("BUNDLE", bundle);
                     Log.d("huheo", "start acti");
                     startActivity(intent);
                 } else {
-                    Toast toast = Toast.makeText(ArCameraActivity.this, "스크린샷 저장 실패!: " + copyResult, Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(ArCameraActivity.this, copyResult, Toast.LENGTH_LONG);
                     toast.show();
                 }
                 //handlerThread.quitSafely();
             }, new Handler(Looper.getMainLooper()));
         }
+    }
+    public void setFoxFace(View view){
+        customArFragment = (CustomArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+        btnFF.setTextColor(Color.parseColor("#FFFFFF"));
+        btnYG.setTextColor(Color.parseColor("#000000"));
+        btnBG.setTextColor(Color.parseColor("#000000"));
+        isChange = true;
+        option = 1;
+        //faceNodeMap.clear();
+        //AugmentedFaceDisplay(R.raw.fox_face);
+    }
+    public void setYellowGlasses(View view){
+        customArFragment = (CustomArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+        btnYG.setTextColor(Color.parseColor("#FFFFFF"));
+        btnFF.setTextColor(Color.parseColor("#000000"));
+        btnBG.setTextColor(Color.parseColor("#000000"));
+        isChange = true;
+        option=2;
+        //faceNodeMap.clear();
+        //AugmentedFaceDisplay(R.raw.yellow_sunglasses);
+    }
+    public void setBlackGlasses(View view){
+        customArFragment = (CustomArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+        btnBG.setTextColor(Color.parseColor("#FFFFFF"));
+        btnFF.setTextColor(Color.parseColor("#000000"));
+        btnYG.setTextColor(Color.parseColor("#000000"));
+        isChange=true;
+        option = 3;
+        //faceNodeMap.clear();
+        //AugmentedFaceDisplay(R.raw.sunglasses);
     }
 }
