@@ -359,8 +359,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         while (iter.hasNext()){
             place = iter.next();
-            System.out.println(place.getImg());
-            bitmap = loadBitmapFromAsset(place.getImg());
+            System.out.println(place.getIcon());
+            bitmap = loadBitmapFromAsset(place.getIcon());
             if (bitmap == null){
                 continue;
             }
@@ -393,15 +393,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bitmap = makeMarkerBitmap(isCustomPlace);
         LatLng position = new LatLng(lat,lng);
 
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(position)
-                .title(title)
-                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                .alpha(1f)
-                .visible(true)
-                .draggable(false);
+        MarkerOptions markerOptions = new MarkerOptions();
         if (!isCustomPlace)
-            markerOptions.rotation(180);
+            markerOptions.position(position)
+                    .title(title)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                    .alpha(1f)
+                    .anchor((float)(0.5),(float)(0.5))
+                    .visible(true)
+                    .draggable(false);
+                    //.rotation(180);
+        else markerOptions.position(position)
+                    .title(title)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                    .alpha(1f)
+                    .visible(true)
+                    .draggable(false);
 
         Marker marker = mMap.addMarker(markerOptions);
 
@@ -411,7 +418,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private Bitmap makeMarkerBitmap(Boolean isCustomPlace) {
+        if (!isCustomPlace) {
+            int height =  bitmap.getHeight();
+            int width =  bitmap.getWidth();
+            if (height > width) {
+                width = (width*200)/height;
+                height = 200;
+            } else {
+                height = (height*200)/width;
+                width = 200;
+            }
+
+            bitmap = resizeBitmap(bitmap, width, height);
+            return bitmap;
+        }
+
         bitmap = resizeBitmap(bitmap, 200,200);
+        if (!isCustomPlace)
+            return bitmap;
         bitmap = getCroppedBitmap();
         if (!isCustomPlace)
             bitmap = RotateBitmap(bitmap);
@@ -592,9 +616,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.getPosition().latitude, marker.getPosition().longitude);
             if (place.getMinZoom() <= zoomLevel * 4 && zoomLevel * 4 <= place.getMaxZoom()) {
                 marker.setVisible(true);
+                marker.setDraggable(true);
             }
-            else marker.setVisible(false);
-
+            else {
+                marker.setVisible(false);
+                marker.setDraggable(false);
+            }
         }
     }
 
