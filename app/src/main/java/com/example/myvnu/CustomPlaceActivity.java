@@ -222,6 +222,7 @@ public class CustomPlaceActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     public Bitmap loadImage(String imgName){
