@@ -149,7 +149,7 @@ public class UpdateActivity extends AppCompatActivity {
                         //System.out.println(key);
                         HashMap<String, Object> h = (HashMap<String, Object>) value;
                         Place p = new Place(h);
-                        status = status + "Place: " + p.getTitle() + "\n";
+                        status = status + p.getTitle() + "\n";
                         txtUpdateStatus.setText(status);
                         dbAction.insert(UpdateActivity.this, p);
                     });
@@ -226,7 +226,7 @@ public class UpdateActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.e("firebase ",";local tem file not created  created " +exception.toString());
+                Log.e("firebase ","local file not created: " + exception.toString());
             }
         });
     }
@@ -243,4 +243,67 @@ public class UpdateActivity extends AppCompatActivity {
         writer.println(Double.toString(_version));
         writer.close();
     }
+
+    /* FOR UPDATE FULL PACKAGE - FUTURE WORKS
+    public void downloadUpdatePackage() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference("assets.zip");
+        StorageReference islandRef = storageRef;
+
+        File rootPath = new File(Environment.getExternalStorageDirectory(), "");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
+        }
+
+        final File localFile = new File(rootPath,"update.zip");
+
+        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Log.e("firebase ",";local tem file created  created " +localFile.toString());
+                //  updateDb(timestamp,localFile.toString(),position);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("firebase ",";local tem file not created  created " +exception.toString());
+            }
+        });
+    }
+
+    public void unzip(String _zipFile, String _targetLocation) {
+        System.out.println("Unzipping");
+        try {
+            FileInputStream fin = new FileInputStream(_zipFile);
+            ZipInputStream zin = new ZipInputStream(fin);
+            System.out.println(fin.toString());
+            ZipEntry ze = null;
+            while ((ze = zin.getNextEntry()) != null) {
+
+                //create dir if required while unzipping
+                if (ze.isDirectory()) {
+                    dirChecker(ze.getName());
+                } else {
+                    FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+                    for (int c = zin.read(); c != -1; c = zin.read()) {
+                        fout.write(c);
+                    }
+                    zin.closeEntry();
+                    fout.close();
+                }
+            }
+            zin.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private void dirChecker(String filepath) {
+        File file = new File(filepath);
+        if (file.exists()) {
+            //Do something
+        }
+        else {file.mkdirs();}
+    }
+     */
 }
