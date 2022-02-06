@@ -356,10 +356,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void addPlaceMarkers() {
-        //addMarkerOnMap(10.8756461,106.7991699, "Trường Đại học Khoa học Tự nhiên", "hcmus", false);
-        //addMarkerOnMap(10.8750095,106.8012331, "Nhà văn hoá sinh viên - Đại học Quốc gia TPHCM", "nvhsv", false);
-        //addMarkerOnMap(10.8880703,106.7891710, "Kí túc xá khu B - Đại học Quốc gia TPHCM", "ktxb", false);
-        //addMarkerOnMap(10.8797654,106.7951268, "Nhà khách Đại học Quốc gia TPHCM","nhakhach", false);
         places = dbAction.getAllDefaultPlaces(MapsActivity.this);
         System.out.println(places.size());
         Iterator<Place> iter = places.iterator();
