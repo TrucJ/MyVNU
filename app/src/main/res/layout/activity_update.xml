@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="200sp"
             android:layout_height="wrap_content"
-            android:text="Phiên bản hiện tại: ">
+            android:text="Phiên bản dữ liệu hiện tại: ">
 
         </TextView>
         <TextView
@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="200sp"
             android:layout_height="wrap_content"
-            android:text="Phiên bản mới nhất:"
+            android:text="Phiên bản dữ liệu mới nhất:"
             >
 
         </TextView>

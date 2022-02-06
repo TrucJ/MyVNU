@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.myvnu.roomdatabase.Place;
+import com.example.myvnu.roomdatabase.PlaceDatabase;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
@@ -36,7 +38,7 @@ public class RecommendActivity extends AppCompatActivity {
     EditText link;
     Button btnView;
     ImageView img;
-    private DBAction dbAction = new DBAction();
+    private DBAction dbAction;
     LinearLayout upLayout;
     LinearLayout downLayout;
     ImageButton btnHome;
@@ -45,13 +47,17 @@ public class RecommendActivity extends AppCompatActivity {
     int idx = 0;
     private TextToSpeech siri;
     private ConstraintLayout discoverLayout;
-    private Recommendation rec = new Recommendation();
+    Place place, item;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
-        items = getDiscover("");
+        place = null; item = null;
+        dbAction = new DBAction();
         initView();
+        items = getDiscover("");
+
         bindData();
     }
     public void setUpLayout(View view){
@@ -73,7 +79,7 @@ public class RecommendActivity extends AppCompatActivity {
         }
     }
     private void bindData() {
-        Place item = null;
+        item = null;
         if(items!=null) item = items.get(idx);
         imageView.setImageBitmap(loadBitmapFromCache(item.getImg()));
         title.setText(item.getTitle());
@@ -81,7 +87,7 @@ public class RecommendActivity extends AppCompatActivity {
         addr.setText(item.getAddress());
         phone.setText(item.getPhoneNumber());
         link.setText(item.getLink());
-        siri.speak(rec.makeIntro(RecommendActivity.this, item), TextToSpeech.QUEUE_FLUSH, null);
+        siri.speak(item.getIntro(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     private ArrayList<Place> getDiscover(String s) {
@@ -89,10 +95,63 @@ public class RecommendActivity extends AppCompatActivity {
         double clng = ((GlobalVariable) this.getApplication()).getChosenLng();
         Log.d("huheo", Double.toString(clat));
         Log.d("huheo", Double.toString(clng));
+        /*
         List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s, new LatLng(clat, clng));
+        Log.d("huheo", Integer.toString(tmp.size()));
         idx = 0;
         return new ArrayList<Place>(tmp);
+        */
+        LatLng latLng = new LatLng(clat, clng);
+        String[] words = s.split(" ");
+        int numWords = 10;
+        if(words.length < 10) numWords = words.length;
+        while (numWords >= 0){
+            for (int i = 0; i + numWords < words.length; i++) {
+                String tag = words[i];
+                for (int j = 1; j < numWords; j++){
+                    tag = tag + " " + words[i+j];
+                }
+
+                if(numWords == 0) tag = " ";
+                List<Place> places = PlaceDatabase.getDatabase(RecommendActivity.this).placeDao().findPlaceWithTag(tag);
+
+                if(places.size() > 0){
+                    List<Place> res = null;
+                    Place[] placesArr = places.toArray(new Place[places.size()]);
+
+                    double curDis = 0;
+                    while (true) {
+                        double minDis = 1000000000;
+                        place = null;
+                        for (int j = 0; j < placesArr.length; j++) {
+                            if (minDis > dis(latLng, placesArr[j]) && dis(latLng, placesArr[j]) > curDis) {
+                                minDis = dis(latLng, placesArr[j]);
+                                place = placesArr[i];
+                            }
+                        }
+                        curDis = minDis;
+                        if (place == null) break;
+                        else res.add(place);
+                    }
+
+                    ArrayList<Place> pls = new ArrayList<Place>();
+                    pls.addAll(res);
+                    return pls;
+                }
+            }
+            numWords--;
+        }
+        return null;
     }
+
+    private double dis(LatLng latLng, Place place){
+        double curLat = latLng.latitude;
+        double curLng = latLng.longitude;
+        double lat = place.getLat();
+        double lng = place.getLng();
+        return (curLat - lat)*(curLat - lat) + (curLng - lng)*(curLng - lng);
+    }
+
 
     private void initView() {
         siri = new TextToSpeech(this, new TextToSpeech.OnInitListener() {

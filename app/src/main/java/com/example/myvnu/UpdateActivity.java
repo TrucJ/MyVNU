@@ -126,15 +126,11 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateDatabase(){
-        /*
-        Place np = new Place(10.849343, 106.782880, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "Hẻm 8, Đường Tân Hòa 2, Quận 9", "","0945334981", 40,100,"alo alo", "#địa điểm mới #vui chơi #đưa đón" );
-        mData.child("data").child("10p849343+106p782880").setValue(np);
-                 */
 
         status = "Phiên bản hiện tại: " + Double.toString(currentVersion) + "\n";
         status = "Phiên bản mới nhất: " + Double.toString(latestVersion) + "\n";
         if(currentVersion == latestVersion){
-            status = status + ("Đây là phiên bản mới nhất.\n");
+            status = status + ("Đây đã là phiên bản mới nhất.\n");
             txtUpdateStatus.setText(status);
         }
         else{
