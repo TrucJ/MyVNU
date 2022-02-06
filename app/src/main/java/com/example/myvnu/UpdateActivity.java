@@ -80,7 +80,6 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        status = "";
         currentVersion = checkVersion();
         txtCurrentVersion.setText(Double.toString(currentVersion));
         initCloudDatabaseRef();
@@ -132,8 +131,8 @@ public class UpdateActivity extends AppCompatActivity {
         mData.child("data").child("10p849343+106p782880").setValue(np);
                  */
 
-        status = status + ("Phiên bản hiện tại: " + Double.toString(currentVersion)) + "\n";
-        status = status + ("Phiên bản mới nhất: " + Double.toString(latestVersion)) + "\n";
+        status = "Phiên bản hiện tại: " + Double.toString(currentVersion) + "\n";
+        status = "Phiên bản mới nhất: " + Double.toString(latestVersion) + "\n";
         if(currentVersion == latestVersion){
             status = status + ("Đây là phiên bản mới nhất.\n");
             txtUpdateStatus.setText(status);
@@ -149,7 +148,6 @@ public class UpdateActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     HashMap<String, Object> dat = (HashMap<String, Object>) task.getResult().getValue();
                     dat.forEach((key, value) -> {
-                        //System.out.println(key);
                         HashMap<String, Object> h = (HashMap<String, Object>) value;
                         Place p = new Place(h);
                         status = status + "+" + p.getTitle() + "\n";
