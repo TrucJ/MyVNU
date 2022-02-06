@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.myvnu.roomdatabase.Place;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,11 +45,12 @@ public class RecommendActivity extends AppCompatActivity {
     int idx = 0;
     private TextToSpeech siri;
     private ConstraintLayout discoverLayout;
+    private Recommendation rec = new Recommendation();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
-        items = getDiscover();
+        items = getDiscover("");
         initView();
         bindData();
     }
@@ -73,17 +75,22 @@ public class RecommendActivity extends AppCompatActivity {
     private void bindData() {
         Place item = null;
         if(items!=null) item = items.get(idx);
-        imageView.setImageBitmap(loadBitmapFromAsset(item.getImg()));
+        imageView.setImageBitmap(loadBitmapFromCache(item.getImg()));
         title.setText(item.getTitle());
         desc.setText(item.getDescription());
         addr.setText(item.getAddress());
         phone.setText(item.getPhoneNumber());
         link.setText(item.getLink());
-        siri.speak("Tới quán Bò né gần khoa học tự nhiên heoheo", TextToSpeech.QUEUE_FLUSH, null);
+        siri.speak(rec.makeIntro(RecommendActivity.this, item), TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    private ArrayList<Place> getDiscover() {
-        List<Place> tmp = dbAction.getAllDefaultPlaces(RecommendActivity.this);
+    private ArrayList<Place> getDiscover(String s) {
+        double clat = ((GlobalVariable) this.getApplication()).getChosenLat();
+        double clng = ((GlobalVariable) this.getApplication()).getChosenLng();
+        Log.d("huheo", Double.toString(clat));
+        Log.d("huheo", Double.toString(clng));
+        List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s, new LatLng(clat, clng));
+        idx = 0;
         return new ArrayList<Place>(tmp);
     }
 
@@ -199,7 +206,7 @@ public class RecommendActivity extends AppCompatActivity {
             case 10:
                 if(resultCode == RESULT_OK && data!=null){
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    idx++;
+                    items = getDiscover(result.get(0));
                     bindData();
                 }
                 break;
@@ -224,6 +231,15 @@ public class RecommendActivity extends AppCompatActivity {
         if(idx > 0) {
             idx--;
             bindData();
+        }
+    }
+    public Bitmap loadBitmapFromCache(String fileName){
+        try{
+            Bitmap bitmap = BitmapFactory.decodeFile(getApplicationContext().getCacheDir().getAbsolutePath() + "/places/" + fileName);
+            return bitmap;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

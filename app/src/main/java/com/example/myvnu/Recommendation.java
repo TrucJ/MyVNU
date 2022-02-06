@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Recommendation {
-    private DBAction dbAction;
+    private DBAction dbAction = new DBAction();
 
     private double dis(LatLng latLng, Place place){
         double curLat = latLng.latitude;
@@ -61,7 +61,7 @@ public class Recommendation {
         }
         return null;
     }
-    public String makeIntro(Place place){
+    public String makeIntro(Context context, Place place){
         return place.getIntro();
     }
 }
