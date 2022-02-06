@@ -20,7 +20,7 @@ public class Recommendation {
         return (curLat - lat)*(curLat - lat) + (curLng - lng)*(curLng - lng);
     }
 
-    public List<Place> findPlaceWithQuery(Context context, String query, LatLng latLng){
+    public List<Place> findPlaceWithQuery(Context context, String query){
         String[] words = query.split(" ");
         int numWords = 10;
         if(words.length < 10) numWords = words.length;
@@ -31,37 +31,19 @@ public class Recommendation {
                     tag = tag + " " + words[i+j];
                 }
 
-                if(numWords == 0) tag = " ";
-
                 List<Place> places = dbAction.findPlaceWithTag(context, tag);
 
                 if(places.size() > 0){
-                    List<Place> res=null;
-                    Place[] placesArr = places.toArray(new Place[places.size()]);
-
-                    double curDis = 0;
-                    while (true) {
-                        double minDis = 1000000000;
-                        Place place = null;
-                        for (int j = 0; j < placesArr.length; j++) {
-                            if (minDis > dis(latLng, placesArr[j]) && dis(latLng, placesArr[j]) > curDis) {
-                                minDis = dis(latLng, placesArr[j]);
-                                place = placesArr[i];
-                            }
-                        }
-                        curDis = minDis;
-                        if (place == null) break;
-                        res.add(place);
-                    }
-
-                    return res;
+                    return places;
                 }
             }
             numWords--;
         }
-        return null;
+        List<Place>p = dbAction.findPlaceWithTitle(context,"khoa");
+        return p;
     }
     public String makeIntro(Context context, Place place){
+        //String[] words = query.split(" ");
         return place.getIntro();
     }
 }

@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class RecommendActivity extends AppCompatActivity {
     ImageView imageView;
@@ -89,9 +90,19 @@ public class RecommendActivity extends AppCompatActivity {
         double clng = ((GlobalVariable) this.getApplication()).getChosenLng();
         Log.d("huheo", Double.toString(clat));
         Log.d("huheo", Double.toString(clng));
-        List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s, new LatLng(clat, clng));
+        List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s);
         idx = 0;
-        return new ArrayList<Place>(tmp);
+        ArrayList<Place> p = new ArrayList<Place>(tmp);
+        int size = p.size();
+        for(int i = 0; i < size - 1; ++i){
+            final int j = new Random().nextInt(size);
+            final int k = new Random().nextInt(size);
+            Place a = p.get(j);
+            Place b = p.get(k);
+            p.set(j, b);
+            p.set(k, a);
+        }
+        return p;
     }
 
     private void initView() {
