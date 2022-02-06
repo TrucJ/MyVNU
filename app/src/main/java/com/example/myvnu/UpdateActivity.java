@@ -32,7 +32,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -124,8 +127,10 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateDatabase(){
-        //Place np = new Place(10.584389, 107.063641, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "addr", "","0900", 28,100,"alo", "#địa điểm mới #vui chơi" );
-        //mData.child("data").child("10p584389+108p063641").setValue(np);
+        /*
+        Place np = new Place(10.849343, 106.782880, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "Hẻm 8, Đường Tân Hòa 2, Quận 9", "","0945334981", 40,100,"alo alo", "#địa điểm mới #vui chơi #đưa đón" );
+        mData.child("data").child("10p849343+106p782880").setValue(np);
+                 */
 
         status = status + ("Phiên bản hiện tại: " + Double.toString(currentVersion)) + "\n";
         status = status + ("Phiên bản mới nhất: " + Double.toString(latestVersion)) + "\n";
@@ -134,7 +139,7 @@ public class UpdateActivity extends AppCompatActivity {
             txtUpdateStatus.setText(status);
         }
         else{
-            status = status + ("Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi...\n");
+            status = status + ("Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi...\n\n");
             txtUpdateStatus.setText(status);
             DBAction dbAction = new DBAction();
 
@@ -147,7 +152,7 @@ public class UpdateActivity extends AppCompatActivity {
                         //System.out.println(key);
                         HashMap<String, Object> h = (HashMap<String, Object>) value;
                         Place p = new Place(h);
-                        status = status + "Place: " + p.getTitle() + "\n";
+                        status = status + "+" + p.getTitle() + "\n";
                         txtUpdateStatus.setText(status);
                         dbAction.insert(UpdateActivity.this, p);
                     });
@@ -166,8 +171,8 @@ public class UpdateActivity extends AppCompatActivity {
                         currentImages.add(files[i].getName());
                     }
 
-                    // Tạo danh sách file ảnh cần tải bổ sung
-                    ArrayList<String> newImages = new ArrayList<String>();
+                    // Tạo danh sách file ảnh cần tải bổ sung (set)
+                    Set<String> newImages = new HashSet<String>();
                     for(int i = 0; i < latestImages.size(); i++){
                         if(latestImages.get(i) != null && !currentImages.contains(latestImages.get(i)))
                             newImages.add(latestImages.get(i));
@@ -177,16 +182,21 @@ public class UpdateActivity extends AppCompatActivity {
                             newImages.add(latestIcons.get(i));
                     }
 
-                    System.out.println("Number images needs to be downloaded: " + Integer.toString(newImages.size()));
-                    for(int i = 0; i < newImages.size(); i++)
-                        System.out.println(newImages.get(i));
-
                     // Tải xuống các file ảnh bổ sung
+                    Iterator<String> iterator = newImages.iterator();
+                    while (iterator.hasNext()) {
+                        String imgFile = iterator.next();
+                        status = status + "New image: " + imgFile + "\n";
+                        txtUpdateStatus.setText(status);
+                        downloadImage(imgFile);
+                    }
+                    /*
                     for(int i = 0; i < newImages.size(); i++){
                         status = status + "New image: " + newImages.get(i) + "\n";
                         txtUpdateStatus.setText(status);
                         downloadImage(newImages.get(i));
                     }
+                    */
 
                     // Cập nhật xong
                     writeVersionFile(latestVersion);
@@ -218,13 +228,13 @@ public class UpdateActivity extends AppCompatActivity {
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " + localFile.toString());
+                Log.e("firebase ","local file created: " + localFile.toString());
                 //  updateDb(timestamp,localFile.toString(),position);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.e("firebase ",";local tem file not created  created " +exception.toString());
+                Log.e("firebase ","local file not created: " + exception.toString());
             }
         });
     }
@@ -241,4 +251,67 @@ public class UpdateActivity extends AppCompatActivity {
         writer.println(Double.toString(_version));
         writer.close();
     }
+
+    /* FOR UPDATE FULL PACKAGE - FUTURE WORKS
+    public void downloadUpdatePackage() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference("assets.zip");
+        StorageReference islandRef = storageRef;
+
+        File rootPath = new File(Environment.getExternalStorageDirectory(), "");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
+        }
+
+        final File localFile = new File(rootPath,"update.zip");
+
+        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Log.e("firebase ",";local tem file created  created " +localFile.toString());
+                //  updateDb(timestamp,localFile.toString(),position);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("firebase ",";local tem file not created  created " +exception.toString());
+            }
+        });
+    }
+
+    public void unzip(String _zipFile, String _targetLocation) {
+        System.out.println("Unzipping");
+        try {
+            FileInputStream fin = new FileInputStream(_zipFile);
+            ZipInputStream zin = new ZipInputStream(fin);
+            System.out.println(fin.toString());
+            ZipEntry ze = null;
+            while ((ze = zin.getNextEntry()) != null) {
+
+                //create dir if required while unzipping
+                if (ze.isDirectory()) {
+                    dirChecker(ze.getName());
+                } else {
+                    FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+                    for (int c = zin.read(); c != -1; c = zin.read()) {
+                        fout.write(c);
+                    }
+                    zin.closeEntry();
+                    fout.close();
+                }
+            }
+            zin.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private void dirChecker(String filepath) {
+        File file = new File(filepath);
+        if (file.exists()) {
+            //Do something
+        }
+        else {file.mkdirs();}
+    }
+     */
 }

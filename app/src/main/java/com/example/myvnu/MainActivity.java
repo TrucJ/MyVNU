@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // UPLOAD - for the first run
+        // UPLOAD - for the first run -> DONOT DELETE
         /*
         places = PlaceDatabase.getDatabase(this).placeDao().getAllDefaultPlaces();
         System.out.println(places.size());
@@ -100,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
             String key = ll.replace('.', 'p');
             mData.child("data").child(key).setValue(place);
         }
-
-
-
         */
     }
 
@@ -225,79 +222,6 @@ public class MainActivity extends AppCompatActivity {
             out.write(buffer, 0, read);
         }
     }
-
-
-
-    /* FOR UPDATE FULL PACKAGE - FUTURE WORKS
-    public void downloadUpdatePackage() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference("assets.zip");
-        StorageReference islandRef = storageRef;
-
-        File rootPath = new File(Environment.getExternalStorageDirectory(), "");
-        if(!rootPath.exists()) {
-            rootPath.mkdirs();
-        }
-
-        final File localFile = new File(rootPath,"update.zip");
-
-        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " +localFile.toString());
-                //  updateDb(timestamp,localFile.toString(),position);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("firebase ",";local tem file not created  created " +exception.toString());
-            }
-        });
-    }
-
-    public void unzip(String _zipFile, String _targetLocation) {
-        System.out.println("Unzipping");
-        try {
-            FileInputStream fin = new FileInputStream(_zipFile);
-            ZipInputStream zin = new ZipInputStream(fin);
-            System.out.println(fin.toString());
-            ZipEntry ze = null;
-            while ((ze = zin.getNextEntry()) != null) {
-
-                //create dir if required while unzipping
-                if (ze.isDirectory()) {
-                    dirChecker(ze.getName());
-                } else {
-                    FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
-                    for (int c = zin.read(); c != -1; c = zin.read()) {
-                        fout.write(c);
-                    }
-
-                    zin.closeEntry();
-                    fout.close();
-                }
-
-            }
-            zin.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private void dirChecker(String filepath) {
-        File file = new File(filepath);
-        if (file.exists()) {
-            //Do something
-        }
-
-        else {
-            file.mkdirs();
-        }
-    }
-
-     */
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
