@@ -8,7 +8,7 @@ import com.example.myvnu.DBAction;
 import java.util.List;
 
 public class Recommendation {
-    private DBAction dbAction;
+    private DBAction dbAction = new DBAction();
 
     public List<Place> findPlaceWithQuery(Context context, String query){
         String[] words = query.split(" ");
@@ -31,7 +31,7 @@ public class Recommendation {
         }
         return null;
     }
-    public String makeIntro(Place place){
+    public String makeIntro(Context context, Place place){
         return place.getIntro();
     }
 }

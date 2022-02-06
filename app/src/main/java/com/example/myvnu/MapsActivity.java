@@ -644,6 +644,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             selectedMarker.remove();
         selectedMarker = addFlagMarkerOnMap(latLng,"Selected");
         if(btnTT.getVisibility() == View.VISIBLE) btnTT.setVisibility(View.INVISIBLE);
+        ((GlobalVariable) this.getApplication()).setChosenLat(latLng.latitude);
+        ((GlobalVariable) this.getApplication()).setChosenLat(latLng.longitude);
     }
     public void convert2Voice(View view){
         Toast toast = Toast.makeText(MapsActivity.this, "Khám phá", Toast.LENGTH_SHORT);

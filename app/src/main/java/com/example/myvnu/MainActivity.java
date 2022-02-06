@@ -241,6 +241,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
+    public void go2Discover(View view){
+        Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
+        startActivity(intent);
+    }
 
 }
