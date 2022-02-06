@@ -32,7 +32,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 
 public class UpdateActivity extends AppCompatActivity {
 
@@ -136,7 +139,7 @@ public class UpdateActivity extends AppCompatActivity {
             txtUpdateStatus.setText(status);
         }
         else{
-            status = status + ("Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi...\n");
+            status = status + ("Đang cập nhật lên phiên bản " + Double.toString(latestVersion) + "\nVui lòng đợi...\n\n");
             txtUpdateStatus.setText(status);
             DBAction dbAction = new DBAction();
 
@@ -149,7 +152,7 @@ public class UpdateActivity extends AppCompatActivity {
                         //System.out.println(key);
                         HashMap<String, Object> h = (HashMap<String, Object>) value;
                         Place p = new Place(h);
-                        status = status + p.getTitle() + "\n";
+                        status = status + "+" + p.getTitle() + "\n";
                         txtUpdateStatus.setText(status);
                         dbAction.insert(UpdateActivity.this, p);
                     });
@@ -168,8 +171,8 @@ public class UpdateActivity extends AppCompatActivity {
                         currentImages.add(files[i].getName());
                     }
 
-                    // Tạo danh sách file ảnh cần tải bổ sung
-                    ArrayList<String> newImages = new ArrayList<String>();
+                    // Tạo danh sách file ảnh cần tải bổ sung (set)
+                    Set<String> newImages = new HashSet<String>();
                     for(int i = 0; i < latestImages.size(); i++){
                         if(latestImages.get(i) != null && !currentImages.contains(latestImages.get(i)))
                             newImages.add(latestImages.get(i));
@@ -179,16 +182,21 @@ public class UpdateActivity extends AppCompatActivity {
                             newImages.add(latestIcons.get(i));
                     }
 
-                    System.out.println("Number images needs to be downloaded: " + Integer.toString(newImages.size()));
-                    for(int i = 0; i < newImages.size(); i++)
-                        System.out.println(newImages.get(i));
-
                     // Tải xuống các file ảnh bổ sung
+                    Iterator<String> iterator = newImages.iterator();
+                    while (iterator.hasNext()) {
+                        String imgFile = iterator.next();
+                        status = status + "New image: " + imgFile + "\n";
+                        txtUpdateStatus.setText(status);
+                        downloadImage(imgFile);
+                    }
+                    /*
                     for(int i = 0; i < newImages.size(); i++){
                         status = status + "New image: " + newImages.get(i) + "\n";
                         txtUpdateStatus.setText(status);
                         downloadImage(newImages.get(i));
                     }
+                    */
 
                     // Cập nhật xong
                     writeVersionFile(latestVersion);
