@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.myvnu.roomdatabase.Place;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -84,7 +85,11 @@ public class RecommendActivity extends AppCompatActivity {
     }
 
     private ArrayList<Place> getDiscover(String s) {
-        List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s);
+        double clat = ((GlobalVariable) this.getApplication()).getChosenLat();
+        double clng = ((GlobalVariable) this.getApplication()).getChosenLng();
+        Log.d("huheo", Double.toString(clat));
+        Log.d("huheo", Double.toString(clng));
+        List<Place> tmp = rec.findPlaceWithQuery(RecommendActivity.this,s, new LatLng(clat, clng));
         idx = 0;
         return new ArrayList<Place>(tmp);
     }
