@@ -29,10 +29,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.myvnu.databinding.ActivityMapsBinding;
@@ -61,7 +64,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraChangeListener, GoogleMap.OnMapClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraChangeListener, GoogleMap.OnMapClickListener, AdapterView.OnItemSelectedListener {
 
     private GoogleMap mMap=null;
     private @NonNull ActivityMapsBinding binding;
@@ -88,8 +91,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Bitmap bitmap;
     private LatLng vnuhcm;
     private LinearLayout cameraLayout;
-
-
     private String pictureImagePath;
     private LatLng currentPos;
     File imgFile;
@@ -109,6 +110,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setHome();
         setVNU();
         btnTT = (Button)findViewById(R.id.btnTT);
+        //set spinner
+        /*spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence>adapter = ArrayAdapter.createFromResource(this, R.array.map_style, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);*/
         //goToPos();
         mapFragment.getMapAsync(this);
     }
@@ -649,5 +656,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         toast.show();
         Intent intent = new Intent(MapsActivity.this, RecommendActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

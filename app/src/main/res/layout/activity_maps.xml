@@ -142,4 +142,5 @@
             android:textColor="#fff"
             android:onClick="camera"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
