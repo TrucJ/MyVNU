@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -211,6 +212,14 @@ public class CustomPlaceActivity extends AppCompatActivity {
             public void onSwipeBottom() {
                 downLayout.setVisibility(View.INVISIBLE);
                 upLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone.getText().toString()));
+                startActivity(intent);
             }
         });
     }
