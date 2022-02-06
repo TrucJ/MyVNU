@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, Const.PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE, Manifest.permission.CAMERA}, Const.PERMISSION_REQUEST_CODE);
         CACHE_DIR = getApplicationContext().getCacheDir().getAbsolutePath();
         IMG_PATH = CACHE_DIR + "/" + Const.IMAGE_FOLDER;
 

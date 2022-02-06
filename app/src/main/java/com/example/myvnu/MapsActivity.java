@@ -374,6 +374,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (bitmap == null){
                 continue;
             }
+            System.out.println(place.getImg());
             double lat = place.getLat();
             double lng = place.getLng();
             String title = place.getTitle();
