@@ -119,6 +119,14 @@ public class PlaceActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.getText().toString()));
+                startActivity(intent);
+            }
+        });
     }
     private void initIntent() {
         data = getIntent().getBundleExtra("data");
