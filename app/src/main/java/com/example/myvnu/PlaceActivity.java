@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -107,6 +108,14 @@ public class PlaceActivity extends AppCompatActivity {
                 bundle.putDouble("lat", item.getLat());
                 bundle.putDouble("lng", item.getLng());
                 intent.putExtra("data", bundle);
+                startActivity(intent);
+            }
+        });
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText().toString()));
                 startActivity(intent);
             }
         });
