@@ -1,6 +1,7 @@
 package com.example.myvnu;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.myvnu.roomdatabase.Place;
 import com.example.myvnu.DBAction;
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Recommendation {
     private DBAction dbAction = new DBAction();
@@ -43,7 +45,7 @@ public class Recommendation {
         return p;
     }
     public String makeIntro(Context context, Place place){
-        //String[] words = query.split(" ");
-        return place.getIntro();
+        String[] options = place.getIntro().split("#");
+        return options[new Random().nextInt(options.length - 1)+1];
     }
 }
