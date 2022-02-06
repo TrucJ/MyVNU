@@ -124,8 +124,10 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updateDatabase(){
-        //Place np = new Place(10.584389, 107.063641, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "addr", "","0900", 28,100,"alo", "#địa điểm mới #vui chơi" );
-        //mData.child("data").child("10p584389+108p063641").setValue(np);
+        /*
+        Place np = new Place(10.849343, 106.782880, "LA Villa", "LA.jpg", "LA.jpg", "Đây là villa của LA", "Hẻm 8, Đường Tân Hòa 2, Quận 9", "","0945334981", 40,100,"alo alo", "#địa điểm mới #vui chơi #đưa đón" );
+        mData.child("data").child("10p849343+106p782880").setValue(np);
+                 */
 
         status = status + ("Phiên bản hiện tại: " + Double.toString(currentVersion)) + "\n";
         status = status + ("Phiên bản mới nhất: " + Double.toString(latestVersion)) + "\n";
@@ -218,7 +220,7 @@ public class UpdateActivity extends AppCompatActivity {
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.e("firebase ",";local tem file created  created " + localFile.toString());
+                Log.e("firebase ","local file created: " + localFile.toString());
                 //  updateDb(timestamp,localFile.toString(),position);
             }
         }).addOnFailureListener(new OnFailureListener() {
